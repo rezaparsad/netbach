@@ -10,7 +10,6 @@ class Location(models.Model):
     country = models.CharField(max_length=40)
     city = models.CharField(max_length=40, unique=True)
     image = models.ForeignKey(Media, on_delete=models.CASCADE)
-    extra_price = models.IntegerField(defautl=0)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
