@@ -1,14 +1,19 @@
 import random
-
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import ensure_csrf_cookie
-
 from config.settings import PAGINATION_BLOGS
 from main.utility import remove_html_tags, get_date_persian
 from .models import Blog, Category
 
+
+def last_blogs():
+    blog_list = Blog.objects.filter(is_active=True).order_by('-created')[:8]
+    for blog in blog_list:
+        blog.content = remove_html_tags(blog.content)[:150]
+        blog.updated = get_date_persian(blog.updated)
+    return blog_list
 
 @ensure_csrf_cookie
 def blog(request, slug):

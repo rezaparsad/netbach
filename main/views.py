@@ -5,7 +5,8 @@ from blog.models import Blog
 from cloud.models import Server, DataCenter
 from config.settings import redis
 from .models import Page, FAQ
-from .utility import DatacenterPackage, remove_html_tags, get_date_persian
+from .utility import remove_html_tags, get_date_persian
+from blog.views import last_blogs
 
 
 def error_404(reuqest, *args, **kwargs):
@@ -18,16 +19,11 @@ def error_500(reuqest, *args, **kwargs):
 
 def home(request):
     home_page = get_object_or_404(Page, slug="home", is_active=True)
-    blogs = Blog.objects.filter(is_active=True).order_by("-created")[:8]
-
-    for blog in blogs:
-        blog.content = remove_html_tags(blog.content)[:150]
-        blog.updated = get_date_persian(blog.updated)
 
     faqs = FAQ.objects.filter(page=home_page, is_active=True)
     return render(request, 'main/home.html', {
         "page": home_page,
-        "blogs": blogs, "faqs": faqs
+        "blogs": last_blogs(), "faqs": faqs
     })
 
 

@@ -9,6 +9,7 @@ from account.utility import human_readable_size
 from config.settings import PAGINATION_SERVERS, API_URL
 from .forms import CreateServerCloudFrom
 from .models import Server, ServerRent, ActivityServer, Location, Category
+from blog.views import last_blogs
 
 
 @login_required()
@@ -117,8 +118,15 @@ def category(request, slug):
         server.disk = human_readable_size(server.disk)
         server.traffic = human_readable_size(server.traffic)
         server.price = human_readable_size(server.price, price=True)
-    return render(request, 'cloud/server-cloud-list.html', {'server_list': server_list, 'page': cat})
+    return render(
+        request, 
+        'cloud/server-cloud-list.html', 
+        {'server_list': server_list, 'page': cat, 'blogs': last_blogs()}
+    )
 
 def category_main(request):
     cat = get_object_or_404(Category, slug='home')
-    return render(request, 'cloud/server-cloud.html', {'server_list': server_list, 'page': cat})
+    return render(
+        request, 'cloud/server-cloud.html', 
+        {'server_list': server_list, 'page': cat, 'blogs': last_blogs()}
+    )
