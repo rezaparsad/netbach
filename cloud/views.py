@@ -102,7 +102,7 @@ def server_info(request, slug):
 
 def category(request, slug):
     cat = get_object_or_404(Category, slug=slug)
-    server_list = Server.objects.filter(category=cat, is_active=True)
+    server_list = Server.objects.filter(category=cat, is_active=True).order_by('price')
     page = request.GET.get('page', '1')
     pages = Paginator(server_list, 25)
     try:
@@ -121,7 +121,7 @@ def category(request, slug):
 
 def category_main(request):
     cat = get_object_or_404(Category, slug='home')
-    server_list = Server.objects.filter(category=cat, is_active=True)
+    server_list = Server.objects.filter(category=cat, is_active=True).order_by('price')
     page = request.GET.get('page', '1')
     pages = Paginator(server_list, 25)
     try:
