@@ -3,6 +3,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.humanize.templatetags import humanize
 
+from .forms import CategoryAdminFrom
 from .models import Server, ServerRent, Location, OperationSystem, DataCenter, ActivityServer, Token, Category
 
 
@@ -51,6 +52,7 @@ class TokenAdmin(admin.ModelAdmin):
 
 class CategoryAdmin(admin.ModelAdmin):
     exclude = ('user', )
+    form = CategoryAdminFrom
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
@@ -64,4 +66,4 @@ admin.site.register(OperationSystem)
 admin.site.register(DataCenter)
 admin.site.register(ActivityServer, ActivityServerRent)
 admin.site.register(Token, TokenAdmin)
-admin.site.register(Category)
+admin.site.register(Category, CategoryAdmin)
