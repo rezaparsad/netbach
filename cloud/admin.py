@@ -56,6 +56,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
+        if form.cleaned_data['reply_id'] == '':
+            obj.reply_id = None
         super().save_model(request, obj, form, change)
 
 
