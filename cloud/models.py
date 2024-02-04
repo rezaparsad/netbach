@@ -10,6 +10,7 @@ class Location(models.Model):
     country = models.CharField(max_length=40)
     city = models.CharField(max_length=40, unique=True)
     image = models.ForeignKey(Media, on_delete=models.CASCADE)
+    extra_price = models.IntegerField(defautl=0)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -101,9 +102,6 @@ class Server(models.Model):
     type_disk = models.CharField(max_length=15, choices=CHOICES_TYPE_DISK)
     traffic = models.CharField(max_length=24)
     port = models.CharField(max_length=24)
-    price_usd = models.IntegerField(default=0)
-    amount_usd = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    profit = models.IntegerField(default=0)
     price = models.IntegerField(default=0)
     price_discount = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
@@ -112,11 +110,6 @@ class Server(models.Model):
 
     def __str__(self):
         return self.slug
-
-    def save(self, *args, **kwargs):
-        if self.price_usd != 0 and self.amount_usd != 0 and self.price == 0:
-            self.price = float(self.price_usd * self.amount_usd) + (float(self.price_usd * self.amount_usd) * 0.09) + self.profit
-        super().save(*args, **kwargs)
 
 
 class ServerRent(models.Model):
