@@ -56,26 +56,11 @@
             <strong class="fs-5">آموزش قدم به قدم <a class="text-decoration-none" title="خرید سرور ابری روزانه" href="/cloud-server/">خرید سرور ابری روزانه</a> با چند کلیک ساده</strong>
         </div>
         <div class="container pb-5">
-            {% for datacenter in datacenters %}
-                <div class="d-flex flex-column rounded p-3">
-                    <div class="d-flex flex-column align-items-center mt-4">
-                        <strong class="fs-5">سرور های دیتاسنتر {{ datacenter.name }}</strong>
-                    </div>
-                    <div class="d-flex justify-content-center flex-wrap mt-4">
-                        {% for location in datacenter.locations %}
-                            <div class="d-flex flex-column align-items-center mx-2 my-2">
-                                <img title="{{ location.city }}" width="72" height="48" class="rounded" src="{{ location.image.file.url }}" alt="{{ location.city }}">
-                                <span class="mt-2 fw-bold" style="font-size: 0.8rem">{{ location.city }}</span>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="d-flex justify-content-center mt-5">
-                        <a title="خرید سرور ابری" class="d-flex justify-content-center text-decoration-none show-all-server-size" href="{% url 'cloud:home' %}">
-                            <button class="w-100 btn bg-primary text-white py-2">سرور روزانه</button>
-                        </a>
-                    </div>
-                </div>
-            {% endfor %}
+            <div class="d-flex justify-content-center mt-5">
+                <a title="خرید سرور ابری" class="d-flex justify-content-center text-decoration-none show-all-server-size" href="{% url 'cloud:home' %}">
+                    <button class="w-100 btn bg-primary text-white py-2">سرور روزانه</button>
+                </a>
+            </div>
             <div class="container mt-5 mb-3 bg-white rounded p-4 d-flex flex-column">
                 {% autoescape off %}
                     {{ page.content }}
