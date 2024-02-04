@@ -49,6 +49,14 @@ class TokenAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
+class CategoryAdmin(admin.ModelAdmin):
+    exclude = ('user', )
+
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user
+        super().save_model(request, obj, form, change)
+
+
 admin.site.register(Server, ServerAdmin)
 admin.site.register(ServerRent, ServerRentAdmin)
 admin.site.register(Location)
