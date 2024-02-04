@@ -1,0 +1,56 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}تاریخچه ورود{% endblock %}
+
+{% block content %}
+    <div class="container rounded-4 border bg-white p-4">
+        <p class="fw-bold">شما می‌توانید اطلاعات ورود حساب کاربری خود را از این بخش مورد بررسی قرار دهید.</p>
+        <table class="table table-hover mt-5 table-item-dashboard">
+            <thead class="bg-alert">
+                <th scope="col">#</th>
+                <th scope="col">دستگاه</th>
+                <th scope="col">آدرس IP</th>
+                <th scope="col">تاریخ و ساعت</th>
+            </thead>
+            <tbody style="vertical-align: unset">
+                {% for login in logins %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ login.data }}</td>
+                        <td>{{ login.ip }}</td>
+                        <td>{{ login.created }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination mt-4 d-flex justify-content-center">
+            {% if logins.number|add:"-3" > 1 %}
+                <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                   href="?page=1">1</a>
+                <span class="mx-2">...</span>
+            {% endif %}
+            {% if logins.has_previous %}
+                {% for b in '123' %}
+                    {% if logins.number|add:forloop.counter|add:"-3" > 1 %}
+                        <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                           href="?page={{ logins.number|add:forloop.counter|add:"-4" }}">{{ logins.number|add:forloop.counter|add:"-4" }}</a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            <button class="btn bg-primary text-white me-2" style="height: 36px; width: 36px; border-radius: 50%">{{ logins.number }}</button>
+            {% if logins.has_next %}
+                {% for b in '123' %}
+                    {% if logins.paginator.num_pages|add:"1" > logins.number|add:forloop.counter %}
+                        <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                           href="?page={{ logins.number|add:forloop.counter }}">{{ logins.number|add:forloop.counter }}</a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if logins.paginator.num_pages > logins.number|add:"3" %}
+                <span class="mx-2">...</span>
+                <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                   href="?page={{ logins.paginator.num_pages }}">{{ logins.paginator.num_pages }}</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'panel/base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="container">
+        <form action="." method="post">
+            <div class="row py-4 px-2 rounded-4 bg-white">
+                {% csrf_token %}
+                <div class="col-12 col-sm-6">
+                    <label class="pb-3" for="">عنوان تیکت</label>
+                    {{ form.title|add_class:"form-control rounded-4"|attr:"style:background-color: #e4e7f2;" }}
+                </div>
+                <div class="col-12 col-sm-6 mt-4 mt-sm-0">
+                    <label class="pb-3" for="">مربوط به بخش</label>
+                    {{ form.category|add_class:"form-control rounded-4"|attr:"style:background-color: #e4e7f2;" }}
+                </div>
+                <div class="col-12 mt-3 mt-4">
+                    <label class="pb-3" for="">متن تیکت</label>
+                    {{ form.content|add_class:"form-control rounded-4"|attr:"style:background-color: #e4e7f2;" }}
+                </div>
+                <div class="px-3">
+                    <button class="btn bg-primary mt-3 text-white py-2 fs-5 w-100 rounded-4">ارسال تیکت</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

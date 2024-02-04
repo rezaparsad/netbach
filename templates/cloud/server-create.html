@@ -1,0 +1,327 @@
+{% extends "panel/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}افزودن سرور{% endblock %}
+
+{% block content %}
+    <div id="loadingView" class="d-none justify-content-center align-items-center position-fixed top-0 start-0 text-center w-100 h-100" style="z-index: 5; outline: 0; top: 0; background-color: #00000080">
+        <div class="shadow rounded-2 bg-white px-5 pb-2" style="width: fit-content">
+            <svg width="160" height="80" viewBox="0 0 587 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.72852 6.125V68H0.291016V0.5H14.3535L53.6846 59.5625L93.0156 0.5H106.463V68H98.0254V7.04785L57.9473 68H49.4219L8.72852 6.125ZM170.931 61.0566C170.843 61.4082 170.184 62.2871 168.953 63.6934C168.074 64.748 166.902 65.6855 165.438 66.5059C163.973 67.2969 162.01 67.9121 159.549 68.3516C157.117 68.8203 153.909 69.0547 149.925 69.0547C144.622 69.0547 140.096 68.7764 136.346 68.2197C132.596 67.6924 129.534 66.8721 127.161 65.7588C124.788 64.6162 123.045 63.166 121.932 61.4082C120.848 59.6504 120.306 57.5557 120.306 55.124C120.306 52.5752 120.599 50.4219 121.185 48.6641C121.8 46.877 122.679 45.3828 123.821 44.1816C124.993 42.9805 126.399 42.043 128.04 41.3691C129.681 40.6953 131.541 40.1826 133.621 39.8311C135.73 39.4795 138.03 39.2598 140.521 39.1719C143.011 39.084 145.662 39.04 148.475 39.04C152.488 39.04 155.843 39.2158 158.538 39.5674C161.233 39.8896 163.431 40.3145 165.13 40.8418C166.858 41.3398 168.162 41.8818 169.041 42.4678C169.92 43.0537 170.55 43.5957 170.931 44.0938C170.931 40.8125 170.784 38.0146 170.491 35.7002C170.228 33.3857 169.773 31.4521 169.129 29.8994C168.514 28.3467 167.708 27.1162 166.712 26.208C165.716 25.2705 164.485 24.5674 163.021 24.0986C161.585 23.6299 159.9 23.3369 157.967 23.2197C156.033 23.0732 153.821 23 151.331 23C147.464 23 144.256 23.1025 141.707 23.3076C139.158 23.4834 137.137 23.8496 135.643 24.4062C134.148 24.9629 133.094 25.7393 132.479 26.7354C131.863 27.7021 131.556 28.9766 131.556 30.5586H123.118C123.118 27.8926 123.587 25.6367 124.524 23.791C125.491 21.9453 127.073 20.4512 129.271 19.3086C131.497 18.1367 134.412 17.2871 138.016 16.7598C141.619 16.2324 146.058 15.9688 151.331 15.9688C156.487 15.9688 160.853 16.3936 164.427 17.2432C168.001 18.0928 170.887 19.5869 173.084 21.7256C175.311 23.8643 176.907 26.75 177.874 30.3828C178.87 33.9863 179.368 38.5566 179.368 44.0938V68H170.931V61.0566ZM151.331 62.375C155.052 62.375 158.157 62.1992 160.647 61.8477C163.167 61.4961 165.188 60.9688 166.712 60.2656C168.235 59.5625 169.319 58.6836 169.964 57.6289C170.608 56.5742 170.931 55.3438 170.931 53.9375C170.931 52.5312 170.55 51.3447 169.788 50.3779C169.056 49.3818 167.811 48.5762 166.053 47.9609C164.324 47.3457 162.024 46.9062 159.153 46.6426C156.282 46.3496 152.737 46.2031 148.519 46.2031C144.3 46.2031 140.887 46.2764 138.279 46.4229C135.701 46.5693 133.709 46.9062 132.303 47.4336C130.896 47.9609 129.944 48.7373 129.446 49.7627C128.978 50.7881 128.743 52.1797 128.743 53.9375C128.743 55.6953 128.992 57.1309 129.49 58.2441C130.018 59.3281 131.072 60.1777 132.654 60.793C134.236 61.4082 136.507 61.833 139.466 62.0674C142.454 62.2725 146.409 62.375 151.331 62.375ZM241.111 68L220.809 46.8184L200.506 68H189.256L215.184 42.248L190.486 17.375H201.736L221.028 36.9307L239.881 17.375H251.131L226.434 42.2041L252.361 68H241.111Z" fill="#9D28FF"></path>
+                <path d="M273.455 68H265.018V0.5H279.827L341.702 59.5625V0.5H350.14V68H338.89L273.455 7.53125V68ZM362.84 42.3359C362.84 37.1504 363.396 32.8584 364.51 29.46C365.623 26.0615 367.41 23.3662 369.871 21.374C372.332 19.3818 375.525 17.9902 379.451 17.1992C383.377 16.3789 388.152 15.9688 393.777 15.9688C399.402 15.9688 404.178 16.3789 408.104 17.1992C412.029 17.9902 415.223 19.3818 417.684 21.374C420.145 23.3662 421.932 26.0615 423.045 29.46C424.158 32.8584 424.715 37.1504 424.715 42.3359C424.715 47.5215 424.158 51.8281 423.045 55.2559C421.932 58.6836 420.145 61.4082 417.684 63.4297C415.223 65.4512 412.029 66.8867 408.104 67.7363C404.178 68.5566 399.402 68.9668 393.777 68.9668C388.152 68.9668 383.377 68.5566 379.451 67.7363C375.525 66.8867 372.332 65.4512 369.871 63.4297C367.41 61.4082 365.623 58.6836 364.51 55.2559C363.396 51.8281 362.84 47.5215 362.84 42.3359ZM371.277 42.3359C371.277 45.1484 371.38 47.5947 371.585 49.6748C371.79 51.7549 372.171 53.542 372.728 55.0361C373.313 56.5303 374.119 57.7461 375.145 58.6836C376.17 59.6211 377.518 60.3682 379.188 60.9248C380.857 61.4814 382.879 61.8623 385.252 62.0674C387.654 62.2725 390.496 62.375 393.777 62.375C396.59 62.375 399.095 62.3164 401.292 62.1992C403.519 62.0527 405.452 61.7451 407.093 61.2764C408.763 60.8076 410.184 60.1484 411.355 59.2988C412.527 58.4199 413.465 57.2334 414.168 55.7393C414.9 54.2451 415.428 52.4141 415.75 50.2461C416.102 48.0488 416.277 45.4121 416.277 42.3359C416.277 39.3184 416.102 36.7549 415.75 34.6455C415.428 32.5068 414.9 30.7197 414.168 29.2842C413.465 27.8486 412.527 26.7207 411.355 25.9004C410.184 25.0508 408.763 24.4209 407.093 24.0107C405.452 23.5713 403.519 23.293 401.292 23.1758C399.095 23.0586 396.59 23 393.777 23C390.965 23 388.445 23.0586 386.219 23.1758C384.021 23.293 382.088 23.5713 380.418 24.0107C378.777 24.4209 377.371 25.0508 376.199 25.9004C375.027 26.7207 374.075 27.8486 373.343 29.2842C372.64 30.7197 372.112 32.5068 371.761 34.6455C371.438 36.7549 371.277 39.3184 371.277 42.3359ZM455.652 68L428.934 17.375H438.777L461.277 62.375L483.777 17.375H493.621L466.902 68H455.652ZM504.871 17.375H513.309V68H504.871V17.375ZM513.309 8.9375H504.871V0.5H513.309V8.9375ZM577.996 68V39.875C577.996 36.7402 577.762 34.1035 577.293 31.9648C576.824 29.7969 575.887 28.0537 574.48 26.7354C573.074 25.417 571.082 24.4648 568.504 23.8789C565.926 23.293 562.527 23 558.309 23C553.738 23 549.988 23.3369 547.059 24.0107C544.158 24.6846 541.873 25.6367 540.203 26.8672C538.533 28.0977 537.376 29.5771 536.731 31.3057C536.116 33.0342 535.809 34.9531 535.809 37.0625V68H527.371V17.375H535.809V25.8125C536.424 24.377 537.303 23.1465 538.445 22.1211C539.588 21.0664 540.877 20.1729 542.312 19.4404C543.748 18.708 545.301 18.1221 546.971 17.6826C548.641 17.2139 550.311 16.8623 551.98 16.6279C553.65 16.3643 555.262 16.1885 556.814 16.1006C558.396 16.0127 559.832 15.9688 561.121 15.9688C564.871 15.9688 568.094 16.2031 570.789 16.6719C573.514 17.1406 575.813 17.8291 577.688 18.7373C579.593 19.6455 581.116 20.7734 582.259 22.1211C583.401 23.4688 584.28 25.0361 584.896 26.8232C585.54 28.5811 585.965 30.5586 586.17 32.7559C586.375 34.9238 586.478 37.2969 586.478 39.875L586.434 68H577.996Z" fill="#FF0000"></path>
+            </svg>
+            <div class="d-flex justify-content-around my-2">
+                <div class="spinner-grow text-primary" role="status" style="width: 1rem; height: 1rem;"></div>
+                <div class="spinner-grow text-primary" role="status" style="width: 1rem; height: 1rem;"></div>
+                <div class="spinner-grow text-primary" role="status" style="width: 1rem; height: 1rem;"></div>
+                <div class="spinner-grow text-primary" role="status" style="width: 1rem; height: 1rem;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="toast-notification" class="toast toast-location position-absolute top-0 mt-3 ms-3 ms-sm-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header d-flex justify-content-end">
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <span id="toast-message" class="text-white"></span>
+        </div>
+    </div>
+    <div id="detailServer" class="container bg-white rounded-3 p-4">
+        <ul id="location-server" class="list-unstyled text-center">
+            {% for location in locations %}
+                <li class="me-2 text-center" style="display: inline-block; cursor: pointer;">
+                    <div class="loc-server border rounded p-1 text-center" data-name="{{ location.city }}"><img
+                            class="rounded" src="{{ location.image.file.url }}" style="width: 60px; height: 42px;"
+                            alt="{{ location.city }}"></div>
+                    <p class="mt-1">{{ location.city }}</p></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="container rounded-4 border bg-white p-4 my-3">
+        <div class="d-flex bg-alert p-3 rounded-4 mb-4">
+            <svg class="svg-icons" style="fill: #0072f5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM208 352c-8.8 0-16 7.2-16 16s7.2 16 16 16h96c8.8 0 16-7.2 16-16s-7.2-16-16-16H272V240c0-8.8-7.2-16-16-16H216c-8.8 0-16 7.2-16 16s7.2 16 16 16h24v96H208zm48-168a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"></path></svg>
+            <span class="fw-bold ms-3" style="color: #0072f5; text-align: justify">قیمت سرورها به صورت روزانه محاسبه میشود.</span>
+        </div>
+        {% if servers %}
+            <div id="list-servers" class="row">
+                {% for server in servers %}
+                <div class="col-12 col-sm-3 mt-3">
+                    <div onclick="onClickServer(this, '{{server.slug}}')" class="server-detail text-center px-4 pb-3 pt-4 rounded-3 border" style="background-color: #fafafa; cursor: pointer;" data-slug="{{ server.slug }}">
+                        <h3 class="mt-2">{{ server.name }}</h3>
+                        <hr>
+                        <p>RAM: {{ server.ram }}</p>
+                        <p>CPU: {{ server.cpu }}</p>
+                        <p>Disk: {{ server.disk }}</p>
+                        <p>Traffic: {{ server.traffic }}</p>
+                        <hr>
+                        <p>ماهانه {{ server.price }}</p>
+                        <p>روزانه {{ server.price_day }}</p>
+                        <hr class="border-0">
+                        <div class="text-center">
+                            <img class="ms-2 rounded-3" width="40" height="40" src="{{ server.datacenter.image.file.url }}" alt="{{ server.location_obj.name }}">
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+        {% else %}
+            <div class="bg-alert p-3 rounded-4 mt-5">
+                <span>موردی برای نمایش یافت نشد.</span>
+            </div>
+        {% endif %}
+    </div>
+    <div class="container bg-white rounded-3 p-4">
+        <select class="form-select form-select-os mx-auto" name="" id="os-server" onchange="onchangeOS(this)">
+        </select>
+        <form action="." method="post" class="text-center">
+            {% csrf_token %}
+            {{ form.slug|attr:"type:hidden" }}
+            {{ form.os|attr:"type:hidden" }}
+            {{ form.location|attr:"type:hidden" }}
+            <div id="submit-create-server" class="btn-create-server btn bg-primary text-white fs-5 py-2 px-5 mt-4">خرید</div>
+        </form>
+    </div>
+    <script>
+        let serverList = null;
+        var onclickedSserver = null;
+        let slugFormElement = document.getElementById('id_slug');
+        let locationFormElement = document.getElementById('id_location');
+        let osFormElement = document.getElementById('id_os');
+        let selectedLocation = null;
+        let selectedServer = null;
+
+        const getCookie = (name) => {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function showToast(key, message) {
+            if (key === "success") {
+                $("#toast-message").text(message)
+                $("#toast-notification").removeClass("bg-danger");
+                $("#toast-notification").addClass("bg-success");
+            } else {
+                $("#toast-message").text(message)
+                $("#toast-notification").removeClass("bg-success");
+                $("#toast-notification").addClass("bg-danger");
+            }
+            window.scrollTo({top: 0, behavior: 'smooth'});
+            $("#toast-notification").toast("show");
+        }
+
+        function setLoading(key) {
+            if (key == "on") {
+                $("#loadingView").removeClass("d-none")
+                $("#loadingView").addClass("d-flex")
+            } else {
+                $("#loadingView").removeClass("d-flex")
+                $("#loadingView").addClass("d-none")
+            }
+        }
+
+        async function pullServer() {
+            setLoading("on")
+            let response = await fetch(`{{ url_api_server_list }}`, {
+                method: "POST",
+                credentials: 'include',
+                headers: {"X-CSRFToken": getCookie('csrftoken')},
+            })
+            setLoading("off")
+            serverList = await response.json();
+            if (onclickedSserver) {
+                showDetailServer(onclickedSserver);
+            }
+        }
+        pullServer()
+
+        function onchangeOS(selectObject) {
+            osFormElement.value = selectObject.value;
+        }
+
+        function setLocations() {
+            let locationServerElements = document.getElementsByClassName('loc-server')
+            for (var i=0; i<locationServerElements.length; i++) {
+                let name = locationServerElements[i].getAttribute('data-name')
+                let locElement = locationServerElements[i]
+                locationServerElements[i].addEventListener("click", function () {
+                    let valid = false;
+                    if (selectedServer) {
+                        for (var e=0; e<serverList.length; e++) {
+                            for (var j=0; j<serverList[e].locations.length; j++) {
+                                if (serverList[e].slug == selectedServer && serverList[e].locations[j].city == name) {
+                                    valid = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (!valid && selectedServer) {
+                        selectedLocation = name;
+                        selectedServer = null;
+                        for (var j=0; j<locationServerElements.length; j++) {
+                            locationServerElements[j].style.setProperty('border-color', '#dee2e6', 'important');
+                        }
+                        locElement.style.setProperty('border-color', 'var(--primary-color-text)', 'important');
+                        setServers(name);
+                        osFormElement.innerHTML = '';
+                        return
+                    }
+                    for (var j=0; j<locationServerElements.length; j++) {
+                        locationServerElements[j].style.setProperty('border-color', '#dee2e6', 'important');
+                    }
+                    locationFormElement.value = name;
+                    locElement.style.setProperty('border-color', 'var(--primary-color-text)', 'important');
+                    selectedLocation = name;
+                    setServers(name, selectedServer);
+                } )
+            }
+        }
+        setLocations()
+
+        function setServers(name, server=null) {
+            serversElement = document.getElementById('list-servers');
+            serversElement.innerHTML = '';
+            slugsValid = [];
+            for (var i=0; i<serverList.length; i++) {
+                for (var j=0; j<serverList[i].locations.length; j++) {
+                    if (serverList[i].locations[j].city === name) {
+                        slugsValid.push(serverList[i].slug);
+                    }
+                }
+            }
+
+            for (var i=0; i<serverList.length; i++) {
+                if (slugsValid.includes(serverList[i].slug)) {
+                    serversElement.innerHTML += `<div class="col-12 col-sm-3 mt-3">
+                    <div onclick="onClickServer(this, '${serverList[i].slug}')" class="server-detail text-center px-4 pb-3 pt-4 rounded-3 border" style="background-color: #fafafa; cursor: pointer;" data-slug="${serverList[i].slug}">
+                        <h3 class="mt-2">${serverList[i].name}</h3>
+                        <hr>
+                        <p>RAM: ${serverList[i].ram}</p>
+                        <p>CPU: ${serverList[i].cpu}</p>
+                        <p>Disk: ${serverList[i].disk}</p>
+                        <p>Traffic: ${serverList[i].traffic}</p>
+                        <hr>
+                        <p>ماهانه ${serverList[i].price}</p>
+                        <p>روزانه ${serverList[i].price_day}</p>
+                        <hr class="border-0">
+                        <div class="text-center">
+                            <img class="ms-2 rounded-3" width="40" height="40" src="${serverList[i].datacenter.image}" alt="">
+                        </div>
+                    </div>
+                </div>`;
+                }
+                
+            }
+            for (var i=0; i<serverList.length; i++) {
+                if (!slugsValid.includes(serverList[i].slug)) {
+                    serversElement.innerHTML += `<div class="col-12 col-sm-3 mt-3">
+                    <div onclick="onClickServer(this, '${serverList[i].slug}')" class="server-detail text-center px-4 pb-3 pt-4 rounded-3 border" style="background-color: rgb(250, 250, 250); cursor: default; border-color: rgb(240, 240, 240) !important; opacity: 0.7;" data-slug="${serverList[i].slug}">
+                        <h3 class="mt-2">${serverList[i].name}</h3>
+                        <hr>
+                        <p>RAM: ${serverList[i].ram}</p>
+                        <p>CPU: ${serverList[i].cpu}</p>
+                        <p>Disk: ${serverList[i].disk}</p>
+                        <p>Traffic: ${serverList[i].traffic}</p>
+                        <hr>
+                        <p>ماهانه ${serverList[i].price}</p>
+                        <p>روزانه ${serverList[i].price_day}</p>
+                        <hr class="border-0">
+                        <div class="text-center">
+                            <img class="ms-2 rounded-3" width="40" height="40" src="${serverList[i].datacenter.image}" alt="">
+                        </div>
+                    </div>
+                </div>`;
+                }
+                
+            }
+        }
+
+        function showDetailServer(slug) {
+            if (serverList === null) {
+                onclickedSserver = slug;
+                return 
+            }
+            for (var i=0; i<serverList.length; i++) {
+                if (serverList[i]['slug'] === slug) {
+                    slugFormElement.value = slug;
+                    osFormElement.value = serverList[i].operation_systems[0];
+                    var loc = false
+                    if (locationFormElement.value) {
+                        for (var l=0; l<serverList[i].locations.length; l++) {
+                            if (locationFormElement.value == serverList[i].locations[l].city) {
+                                loc = true
+                            }
+                        }
+                    }
+                    if (!loc) {
+                        locationFormElement.value = serverList[i].locations[0].city
+                    }
+                    let osServerElement = document.getElementById('os-server');
+                    osServerElement.innerHTML = '';
+                    for (var s=0; s<serverList[i].operation_systems.length; s++) {
+                        osServerElement.innerHTML += `<option value="${serverList[i].operation_systems[s]}">${serverList[i].operation_systems[s]}</option>`;
+                    }
+                }
+            }
+        }
+
+        function onClickServer(el, slug) {
+            let serverElements = document.getElementsByClassName('server-detail');
+                let serverElement = el;
+                if (serverElement.style.cursor === 'default') {
+                    return 
+                }
+                selectedServer = slug;
+                for (var j=0; j<serverElements.length; j++) {
+                    serverElements[j].style.setProperty('border-color', '#f0f0f0', 'important')
+                }
+                serverElement.style.setProperty('border-color', 'var(--primary-color-background)', 'important')
+                showDetailServer(slug);
+        }
+
+        async function submitCreateServer() {
+            if (!selectedLocation || !selectedServer) {
+                showToast('false', 'سرور و لوکیشن سرور را انتخاب کنید')
+                return  
+            }
+            setLoading('on')
+            let locationElement = document.getElementById('id_location');
+            let osElement = document.getElementById('id_os');
+            let slugElement = document.getElementById('id_slug')
+            let response = await fetch(`{{ api_url }}server/cloud/buy/${slugElement.value}/`, {
+                method: "POST",
+                credentials: 'include',
+                headers: {"X-CSRFToken": getCookie('csrftoken'), 'Content-Type': 'application/json'},
+                body: JSON.stringify({"slug": slugElement.value, "os": osElement.value, "location": locationElement.value})
+            })
+            let responseJson = await response.json();
+            if (responseJson["status"] === false) {
+                $(document).ready(function(){
+                    showToast('fail', responseJson.message)
+                });
+            } else {
+                window.location.replace(responseJson["next"])
+            }
+            setLoading('off')
+        }
+
+        let btnCreateServer = document.getElementById('submit-create-server');
+        async function onclickSubmitCreateServer() {
+            btnCreateServer.addEventListener('click', function () {
+                submitCreateServer()
+            })
+        }
+
+        onclickSubmitCreateServer()
+
+    </script>
+{% endblock %}

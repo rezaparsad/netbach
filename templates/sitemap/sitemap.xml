@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{% spaceless %}
+{% for url in urlset %}
+  <sitemap>
+    <loc>{{ url.location }}</loc>
+    {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"Y-m-d" }}</lastmod>{% endif %}
+  </sitemap>
+{% endfor %}
+{% endspaceless %}
+</sitemapindex>

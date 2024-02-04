@@ -1,0 +1,34 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{% if page.title %}{{ page.title }}{% else %}{{ page.name }}{% endif %}{% endblock %}
+{% block titletwitter %}{% if page.title %}{{ page.title }}{% else %}{{ page.name }}{% endif %}{% endblock %}
+{% block titleog %}{% if page.title %}{{ page.title }}{% else %}{{ page.name }}{% endif %}{% endblock %}
+
+{% block head %}
+    {% if page.description %}
+        <meta name="description" content="{{ page.description }}">{% endif %}
+    {% if page.description %}
+        <meta name="twitter:description" content="{{ page.description }}">{% endif %}
+    {% if category.description %}
+        <meta name="og:description" content="{{ page.description }}">{% endif %}
+    {% if page.keywords %}
+        <meta name="keywords" content="{{ page.keywords }}">{% endif %}
+    {% if page.image_meta %}
+        <meta property="og:image" content="https://netbach.com
+                {% if page.image_meta.resized_file %}{{ page.image_meta.resized_file.url }}{% else %}{{ page.image_meta.file.url }}{% endif %}">
+    {% endif %}
+    {% if page.image_meta %}
+        <meta name="twitter:image" content="https://netbach.com
+                {% if page.image_meta.resized_file %}{{ page.image_meta.resized_file.url }}{% else %}{{ page.image_meta.file.url }}{% endif %}">
+    {% endif %}
+    <meta property="og:type" content="page">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container my-5">
+        {% autoescape off %}
+        {{ page.content }}
+        {% endautoescape %}
+    </div>
+{% endblock %}

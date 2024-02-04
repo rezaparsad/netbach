@@ -1,0 +1,129 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}افزایش اعتبار{% endblock %}
+
+
+{% block content %}
+    <div class="container rounded-4 border bg-white p-4">
+        <p class="fw-bold">از این بخش می توانید به مقدار دلخواه حساب خود را شارژ کنید.</p>
+        <div class="d-flex bg-alert p-3 rounded-4">
+            <svg class="svg-icons" style="fill: #0072f5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM208 352c-8.8 0-16 7.2-16 16s7.2 16 16 16h96c8.8 0 16-7.2 16-16s-7.2-16-16-16H272V240c0-8.8-7.2-16-16-16H216c-8.8 0-16 7.2-16 16s7.2 16 16 16h24v96H208zm48-168a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"/></svg>
+            <span class="fw-bold ms-3" style="color: #0072f5; text-align: justify">مالیات بر ارزش افزوده جداگانه حساب می‌شود. مبلغ پرداختی نمی‌ تواند کمتر از 20,000 تومان باشد.</span>
+        </div>
+        <div class="d-flex flex-column align-items-center mt-5">
+            <label for="input-amount" class="mb-2">مبلغ (تومان)</label>
+            <input id="input-amount" inputmode="numeric" type="text" class="form-control p-2 payment-size">
+            <p id="error-field" class="d-none mt-3 text-danger text-natural"></p>
+            <button disabled id="btn-checkout" class="payment-size btn mt-3 py-2 text-white w-100" style="background-color: #009f08;">
+                <span>پرداخت</span>
+                <div class="d-none spinner-border spinner-border-sm" role="status" id="spinner-loading"></div>
+            </button>
+        </div>
+    </div>
+    <script>
+        const getCookie = (name) => {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrfToken = getCookie('csrftoken');
+
+        async function payment(amount) {
+            let response = await fetch(`{{ api_url }}payment/`, {
+                method: "POST",
+                credentials: 'include',
+                headers: {"X-CSRFToken": csrfToken},
+                body: JSON.stringify({"amount": amount})
+            })
+            return await response.json()
+        }
+
+        function errorShape(message) {
+            errorField.innerText = message
+            errorField.classList.remove("d-none")
+            btnCheckout.firstElementChild.classList.remove("d-none")
+            btnCheckout.disabled = false
+            input.disabled = false
+            spinner.classList.add("d-none")
+        }
+
+        let regex_amount = /^[0-9۰-۹]{5,}$/
+        let btnCheckout = document.querySelector("#btn-checkout")
+        let input = document.querySelector("#input-amount")
+        let errorField = document.querySelector("#error-field")
+        let spinner = document.querySelector("#spinner-loading")
+
+        function numberWithCommas(number) {
+            return parseInt(number).toLocaleString("en-US")
+        }
+
+        function numberWithoutCommas(number) {
+            return number.toString().replaceAll(",", "") || 0
+        }
+
+        input.addEventListener("input", () => {
+            let value = numberWithoutCommas(input.value)
+            input.value = numberWithCommas(value)
+            if (regex_amount.test(value)) {
+                let amount = checkDigit(value)
+                btnCheckout.disabled = parseInt(amount) < 20000;
+            } else
+                btnCheckout.disabled = true
+        })
+        btnCheckout.addEventListener("click", () => {
+            errorField.classList.add("d-none")
+            input.disabled = true
+            btnCheckout.firstElementChild.classList.add("d-none")
+            btnCheckout.disabled = true
+            spinner.classList.remove("d-none")
+            let amount = checkDigit(numberWithoutCommas(input.value))
+            payment(amount).then(response => {
+                let message = response["message"]
+                if (response["response"] === true) {
+                    input.disabled = false
+                    btnCheckout.firstElementChild.classList.remove("d-none")
+                    btnCheckout.disabled = false
+                    spinner.classList.add("d-none")
+                    window.location.replace(response["next"])
+                } else {
+                    errorShape(message)
+                }
+            }).catch(() => errorShape("خطا در بررسی اطلاعات"))
+        })
+
+        function checkDigit(number) {
+            const faDigits = {
+                "۱": "1",
+                "۲": "2",
+                "۳": "3",
+                "۴": "4",
+                "۵": "5",
+                "۶": "6",
+                "۷": "7",
+                "۸": "8",
+                "۹": "9",
+                "۰": "0"
+            }
+            var newNumber = ""
+            for (let i = 0; i < number.length; i++) {
+                let char = number[i]
+                if (Object.keys(faDigits).includes(char)) {
+                    newNumber += faDigits[char]
+                } else {
+                    newNumber += char
+                }
+            }
+            return newNumber
+        }
+
+    </script>
+{% endblock %}

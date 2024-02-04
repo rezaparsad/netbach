@@ -1,0 +1,463 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{% if blog.title %}{{ blog.title }}{% else %}{{ blog.name }}{% endif %}{% endblock %}
+{% block titletwitter %}{% if blog.title %}{{ blog.title }}{% else %}{{ blog.name }}{% endif %}{% endblock %}
+{% block titleog %}{% if blog.title %}{{ blog.title }}{% else %}{{ blog.name }}{% endif %}{% endblock %}
+
+{% block head %}
+    {% if blog.description %}
+        <meta name="description" content="{{ blog.description }}">{% endif %}
+    {% if blog.description %}
+        <meta name="twitter:description" content="{{ blog.description }}">{% endif %}
+    {% if blog.description %}
+        <meta property="og:description" content="{{ blog.description }}">{% endif %}
+    {% if blog.keywords %}
+        <meta name="keywords" content="{{ blog.keywords }}">{% endif %}
+    {% if blog.image_meta %}
+        <meta property="og:image" content="https://netbach.com
+
+                {% if blog.image_meta.resized_file %}{{ blog.image_meta.resized_file.url }}{% else %}{{ blog.image_meta.file.url }}{% endif %}">
+    {% endif %}
+    {% if blog.image_meta %}
+        <meta name="twitter:image" content="https://netbach.com
+
+                {% if blog.image_meta.resized_file %}{{ blog.image_meta.resized_file.url }}{% else %}{{ blog.image_meta.file.url }}{% endif %}">
+    {% endif %}
+    <meta property="og:type" content="blog">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <script type="application/ld+json">
+        {
+         "@context": "https://schema.org",
+         "@type": "BreadcrumbList",
+         "itemListElement": [
+            {
+               "@type": "ListItem",
+               "position": 1,
+               "item": {"@id": "https://netbach.com/", "name": "نت بچ"}
+            },
+            {% for breadcrumb in breadcrumbs %}
+            {
+                "@type": "ListItem",
+                "position": {{ forloop.counter|add:1 }},
+                "item": {
+                "@id": "https://netbach.com/{% if breadcrumb.slug != 'blog' %}blog/{% endif %}{{ breadcrumb.slug }}/",
+                "name": "{{ breadcrumb.name }}"
+                }
+             }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+          ]
+        }
+    </script>
+    {% if blog.get_percentage >= 3 %}
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org/",
+                "@type": "CreativeWorkSeason",
+                "name": "{{ blog.title }}",
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "{{ blog.get_percentage }}",
+                    "ratingCount": "{{ blog.total_review_rating }}",
+                    "bestRating": "5",
+                    "worstRating": "1"
+                }
+            }
+        </script>
+    {% endif %}
+    <style>
+        a {
+            text-decoration: none !important;
+        }
+        .review-btn:hover {
+            background-color: #007bff !important;
+            color: white !important;
+        }
+        h2 {
+            color: #cf2e2e !important;
+        }
+        h3 {
+            color: #9b51e0 !important;
+        }
+        h4 {
+            color: #00d084 !important;
+        }
+        p {
+            color: #434343 !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4 px-sm-5">
+        <ul class="list-unstyled overflow-x-auto" style="white-space: nowrap">
+            <li style="display: inline;"><a class="text-decoration-none text-secondary user-location" href="/" title="نت بچ">نت بچ</a></li>
+            {% if category.reply_id %}
+                {{ category.get_reply }}
+                {% if category.reply.reply_id %}
+                    {{ category.reply.get_reply }}
+                    {% if category.reply.reply.reply_id %}
+                        {{ category.reply.reply.get_reply }}
+                        {% if category.reply.reply.reply.reply_id %}
+                            {{ category.reply.reply.reply.get_reply }}
+                            {% if category.reply.reply.reply.reply.reply_id %}
+                                {{ category.reply.reply.reply.reply.get_reply }}
+                                {% if category.reply.reply.reply.reply.reply.reply_id %}
+                                    {{ category.reply.reply.reply.reply.reply.get_reply }}
+                                    {% if category.reply.reply.reply.reply.reply.reply.reply_id %}
+                                        {{ category.reply.reply.reply.reply.reply.reply.get_reply }}
+                                        {% if category.reply.reply.reply.reply.reply.reply.reply.reply_id %}
+                                            {{ category.reply.reply.reply.reply.reply.reply.reply.get_reply }}
+                                            {% if category.reply.reply.reply.reply.reply.reply.reply.reply.reply_id %}
+                                                {{ category.reply.reply.reply.reply.reply.reply.reply.reply.get_reply }}
+                                                {% if category.reply.reply.reply.reply.reply.reply.reply.reply.reply.reply_id %}
+                                                    {{ category.reply.reply.reply.reply.reply.reply.reply.reply.reply.get_reply }}
+                                                    <li style="display: inline;">
+                                                        <span class="me-2 ms-1 text-secondary user-location">/</span>
+                                                        <a class="text-decoration-none text-secondary user-location"
+                                                           href="
+
+                                                                   {% if category.slug == 'blog' %}{% url 'blog:list-of-blogs' %}{% else %}{% url 'blog:category' category.reply.reply.reply.reply.reply.reply.reply.reply.reply.reply.slug %}{% endif %}"
+                                                           title="{{ category.reply.reply.reply.reply.reply.reply.reply.reply.reply.reply.name }}">
+                                                            {{ category.reply.reply.reply.reply.reply.reply.reply.reply.reply.reply.name }}
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                                <li style="display: inline;">
+                                                    <span class="me-2 ms-1 text-secondary user-location">/</span>
+                                                    <a class="text-decoration-none text-secondary user-location" href="
+
+                                                            {% if category.slug == 'blog' %}{% url 'blog:list-of-blogs' %}{% else %}{% url 'blog:category' category.reply.reply.reply.reply.reply.reply.reply.reply.reply.slug %}{% endif %}"
+                                                       title="{{ category.reply.reply.reply.reply.reply.reply.reply.reply.reply.name }}">
+                                                        {{ category.reply.reply.reply.reply.reply.reply.reply.reply.reply.name }}
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            <li style="display: inline;">
+                                                <span class="me-2 ms-1 text-secondary user-location">/</span>
+                                                <a class="text-decoration-none text-secondary user-location" href="
+
+                                                        {% if category.slug == 'blog' %}{% url 'blog:list-of-blogs' %}{% else %}{% url 'blog:category' category.reply.reply.reply.reply.reply.reply.reply.reply.slug %}{% endif %}"
+                                                   title="{{ category.reply.reply.reply.reply.reply.reply.reply.reply.name }}">
+                                                    {{ category.reply.reply.reply.reply.reply.reply.reply.reply.name }}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        <li style="display: inline;">
+                                            <span class="me-2 ms-1 text-secondary user-location">/</span>
+                                            <a class="text-decoration-none text-secondary user-location" href="
+
+                                                    {% if category.slug == 'blog' %}{% url 'blog:list-of-blogs' %}{% else %}{% url 'blog:category' category.reply.reply.reply.reply.reply.reply.reply.slug %}{% endif %}"
+                                               title="{{ category.reply.reply.reply.reply.reply.reply.reply.name }}">
+                                                {{ category.reply.reply.reply.reply.reply.reply.reply.name }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                    <li style="display: inline;">
+                                        <span class="me-2 ms-1 text-secondary user-location">/</span>
+                                        <a class="text-decoration-none text-secondary user-location" href="
+
+                                                {% if category.slug == 'blog' %}{% url 'blog:list-of-blogs' %}{% else %}{% url 'blog:category' category.reply.reply.reply.reply.reply.reply.slug %}{% endif %}"
+                                           title="{{ category.reply.reply.reply.reply.reply.reply.name }}">
+                                            {{ category.reply.reply.reply.reply.reply.reply.name }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                <li style="display: inline;">
+                                    <span class="me-2 ms-1 text-secondary user-location">/</span>
+                                    <a class="text-decoration-none text-secondary user-location" href="
+
+                                            {% if category.slug == 'blog' %}{% url 'blog:list-of-blogs' %}{% else %}{% url 'blog:category' category.reply.reply.reply.reply.reply.slug %}{% endif %}"
+                                       title="{{ category.reply.reply.reply.reply.reply.name }}">
+                                        {{ category.reply.reply.reply.reply.reply.name }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li style="display: inline;">
+                                <span class="me-2 ms-1 text-secondary user-location">/</span>
+                                <a class="text-decoration-none text-secondary user-location" href="
+
+                                        {% if category.slug == 'blog' %}{% url 'blog:list-of-blogs' %}{% else %}{% url 'blog:category' category.reply.reply.reply.reply.slug %}{% endif %}"
+                                   title="{{ category.reply.reply.reply.reply.name }}">
+                                    {{ category.reply.reply.reply.reply.name }}
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li style="display: inline;">
+                            <span class="me-2 ms-1 text-secondary user-location">/</span>
+                            <a class="text-decoration-none text-secondary user-location" href="
+
+                                    {% if category.slug == 'blog' %}{% url 'blog:list-of-blogs' %}{% else %}{% url 'blog:category' category.reply.reply.reply.slug %}{% endif %}"
+                               title="{{ category.reply.reply.reply.name }}">
+                                {{ category.reply.reply.reply.name }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li style="display: inline;">
+                        <span class="me-2 ms-1 text-secondary user-location">/</span>
+                        <a class="text-decoration-none text-secondary user-location" href="
+
+                                {% if category.slug == 'blog' %}{% url 'blog:list-of-blogs' %}{% else %}{% url 'blog:category' category.reply.reply.slug %}{% endif %}"
+                           title="{{ category.reply.reply.name }}">
+                            {{ category.reply.reply.name }}
+                        </a>
+                    </li>
+                {% endif %}
+                <li style="display: inline;">
+                    <span class="me-2 ms-1 text-secondary user-location">/</span>
+                    <a class="text-decoration-none text-secondary user-location" href="
+
+                            {% if category.slug == 'blog' %}{% url 'blog:list-of-blogs' %}{% else %}{% url 'blog:category' category.reply.slug %}{% endif %}"
+                       title="{{ category.reply.name }}">
+                        {{ category.reply.name }}
+                    </a>
+                </li>
+            {% endif %}
+            <li style="display: inline;">
+                <span class="me-2 ms-1 text-secondary user-location">/</span>
+                <a class="text-decoration-none text-secondary user-location" href="
+
+                        {% if category.slug == 'blog' %}{% url 'blog:list-of-blogs' %}{% else %}{% url 'blog:category' category.slug %}{% endif %}"
+                   title="{{ category.name }}">
+                    {{ category.name }}
+                </a>
+            </li>
+            <li style="display: inline;">
+                <span class="me-2 ms-1 text-secondary user-location">/</span>
+                <a class="text-decoration-none text-secondary user-location"
+                   href="{% url 'blog:detail-blog' blog.slug %}" title="{{ blog.name }}">
+                    {{ blog.name }}
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="container px-sm-5 mb-5">
+        <div class="row">
+            <div class="col-12 col-sm-8">
+                <div class="card-wrapper">
+                    <div class="card shadow-sm" style="border-color: #e0e0e0;">
+                        <div class="d-flex justify-content-center mt-2 mx-2">
+                            <div class="p-sm-3">
+                                <img class="w-100 img-fluid rounded"
+                                 title="{{ blog.name }}"
+                                 alt="{% if blog.poster.alt %}{{ blog.poster.alt }}{% else %}{{ blog.name }}{% endif %}"
+                                 src="{{ blog.poster.file.url }}">
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column p-3">
+                            <div class="d-flex flex-column flex-sm-row justify-content-sm-around align-items-center mt-2" style="color: #6c6c6c">
+                                <div class="d-flex">
+                                    <span>انتشار :</span>
+                                    <span class="ms-2" style="font-size: 0.8rem">{{ blog.created }}</span>
+                                </div>
+                                <div class="d-flex align-items-center mt-3 mt-sm-0">
+                                    <span>آخرین بروزرسانی :</span>
+                                    <span class="ms-2" style="font-size: 0.8rem">{{ blog.updated }}</span>
+                                </div>
+                                <div class="d-flex align-items-center mt-3 mt-sm-0">
+                                    <span>بازدید :</span>
+                                    <span class="ms-2" style="font-size: 0.8rem">{{ blog.view }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="pe-2 col-4">
+                                    <div class="rounded" style="background: #edf1f4; height: 0.25rem;"></div>
+                                </div>
+                                <div class="pe-2 col-4">
+                                    <div class="rounded" style="background: #edf1f4; height: 0.25rem;"></div>
+                                </div>
+                                <div class="pe-2 col-4">
+                                    <div class="rounded" style="background: #edf1f4; height: 0.25rem;"></div>
+                                </div>
+                            </div>
+                            <h1 class="mt-5">{{ blog.name }}</h1>
+                            <div class="d-flex flex-column p-3 border rounded mt-5">
+                                <strong class="mb-4 text-primary">فهرست مطالب</strong>
+                                <ul id="table-of-content"></ul>
+                            </div>
+                            <div class="mt-5 mb-4 d-flex flex-column">
+                                {% autoescape off %}
+                                    {{ blog.content }}
+                                {% endautoescape %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column align-items-center rounded border py-4 shadow-sm mt-5">
+                    <div class="d-flex flex-row-reverse">
+                        {% for i in "12345" %}
+                            <svg fill="{% if forloop.counter <= star %}#ffc107{% else %}#b6b6b6{% endif %}" width="30" height="30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>
+                        {% endfor %}
+                    </div>
+                    <div class="d-flex mt-4">
+                        <span class="mx-2 fw-bold">بر اساس رأی</span>
+                        <span class="fw-bold" style="color: #007bff">{{ blog.total_review_rating }}</span>
+                        <span class="mx-2 fw-bold">نفر</span>
+                    </div>
+                    <span class="mt-3">آیا این مطلب برای شما مفید بود ؟</span>
+                    <div class="d-flex justify-content-center mt-4" id="wrapper-vote-buttons">
+                        <button onclick="givenReview(true)" style="color: #007bff" class="btn review-btn fw-bold shadow-sm border px-5 py-2 mx-2">بله</button>
+                        <button onclick="givenReview(false)" style="color: #007bff" class="btn review-btn fw-bold shadow-sm border px-5 py-2 mx-2">خیر</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-4 mt-5 mt-sm-0">
+                <div class="card p-3">
+                    <div class="d-flex flex-column mb-4">
+                        <strong>مطالب مرتبط</strong>
+                        <div class="rounded-4 mt-2" style="width: 48px; height: 4px; background-color: var(--primary-color-background)"></div>
+                    </div>
+                    {% for related_blog in related_blogs %}
+                        <div class="row my-2 px-2">
+                            <div class="col-3">
+                                <a href="{% url 'blog:detail-blog' related_blog.slug %}" title="{{ related_blog.name }}">
+                                    <img class="img-fluid w-100 rounded"
+                                         title="{{ related_blog.name }}"
+                                         alt="{% if related_blog.poster.alt %}{{ related_blog.poster.alt }}{% else %}{{ related_blog.name }}{% endif %}"
+                                         src="{% if related_blog.poster.resized_file %}{{related_blog.poster.resized_file.url}}{% else %}{{ related_blog.poster.file.url }}{% endif %}">
+                                </a>
+                            </div>
+                            <div class="col-9 ps-0 d-flex align-items-center">
+                                <div class="media-body">
+                                    <a class="text-decoration-none text-black article-title"
+                                       href="{% url 'blog:detail-blog' related_blog.slug %}"
+                                       title="{{ related_blog.name }}">{{ related_blog.name }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="card sticky-top p-3 mt-4">
+                    <div class="d-flex flex-column mb-4">
+                        <strong>جدیدترین مطالب</strong>
+                        <div class="rounded-4 mt-2" style="width: 48px; height: 4px; background-color: var(--primary-color-background)"></div>
+                    </div>
+                    {% for newest_blog in newest_blogs %}
+                        <div class="row my-2 px-2">
+                            <div class="col-3">
+                                <a href="{% url 'blog:detail-blog' newest_blog.slug %}" title="{{ newest_blog.name }}">
+                                    <img class="img-fluid w-100 rounded"
+                                         title="{{ newest_blog.name }}"
+                                         alt="{% if newest_blog.poster.alt %}{{ newest_blog.poster.alt }}{% else %}{{ newest_blog.name }}{% endif %}"
+                                         src="{% if newest_blog.poster.resized_file %}{{newest_blog.poster.resized_file.url}}{% else %}{{ newest_blog.poster.file.url }}{% endif %}">
+                                </a>
+                            </div>
+                            <div class="col-9 ps-0 d-flex align-items-center">
+                                <div class="media-body">
+                                    <a class="text-decoration-none text-black article-title"
+                                       href="{% url 'blog:detail-blog' newest_blog.slug %}"
+                                       title="{{ v.name }}">{{ newest_blog.name }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="image-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="d-flex justify-content-center py-2">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <img class="rounded" src="" alt="" id="modal-image">
+            </div>
+        </div>
+    </div>
+    <div id="toast-notification" class="toast toast-location position-fixed top-0 start-0 mt-3 ms-3 ms-sm-0"
+         role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header d-flex justify-content-end">
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <span id="toast-message" class="text-white"></span>
+        </div>
+    </div>
+    <script>
+        const getCookie = (name) => {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrfToken = getCookie('csrftoken');
+        const buttons = document.querySelector("#wrapper-vote-buttons").childNodes
+        async function sendReview(body) {
+            let slug = window.location.href.split("/").slice(-2).join("")
+            let response = await fetch(`{{ api_url }}blog/review/${slug}/`, {
+                method: "POST",
+                credentials: 'include',
+                headers: {"X-CSRFToken": csrfToken},
+                body: body
+            })
+            return await response.json()
+        }
+
+        statusButton = (status) => {
+            buttons.forEach(button => {
+                button.disabled = status
+            })
+        }
+
+        function givenReview(answer) {
+            statusButton(true)
+            sendReview(JSON.stringify({
+                "answer": answer
+            })).then(response => {
+                if (response["response"] === true) {
+                    showToast("success", response["message"])
+                } else {
+                    showToast("error", response["message"])
+                }
+                statusButton(false)
+            }).catch(() => {
+                showToast("error")
+                statusButton(false)
+            })
+        }
+
+        function showToast(key, message) {
+            if (key === "success") {
+                $("#toast-message").text(message)
+                $("#toast-notification").removeClass("bg-danger");
+                $("#toast-notification").addClass("bg-success");
+            } else {
+                $("#toast-message").text(message || "عملیات با خطا مواجه شد")
+                $("#toast-notification").removeClass("bg-success");
+                $("#toast-notification").addClass("bg-danger");
+            }
+            $("#toast-notification").toast("show");
+        }
+
+        const modal = new bootstrap.Modal(document.querySelector('#image-modal'))
+            const modal_image = document.querySelector("#modal-image")
+            const images = document.querySelectorAll(".img-editor")
+            images.forEach(image => {
+                image.addEventListener("click", () => {
+                    modal_image.src = image.src
+                    modal_image.alt = image.alt
+                    modal_image.title = image.title
+                    modal.show()
+                })
+            })
+
+        $(document).ready(() => {
+            let wrapper = document.querySelector("#table-of-content")
+            let hTags = document.querySelectorAll("h2")
+            hTags.forEach(element => {
+                element.id = element.innerText.split(" ").join("_")
+                wrapper.innerHTML += `<li class="py-1"><a href="#${element.id}" title="${element.innerText}">${element.innerText}</a></li>`
+            })
+        })
+    </script>
+{% endblock %}

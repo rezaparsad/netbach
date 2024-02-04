@@ -1,0 +1,36 @@
+{% extends 'admin/change_form.html' %}
+{% load static %}
+
+{% block field_sets %}
+    {{ block.super }}
+    <script>
+        let divWrapper = document.createElement("div")
+        let titleCounterName = document.createElement("span")
+        let titleCounter = document.createElement("strong")
+        let div = document.querySelector(".field-title")
+        let input = document.querySelector("#id_title")
+        divWrapper.appendChild(titleCounterName)
+        divWrapper.appendChild(titleCounter)
+        div.appendChild(divWrapper)
+        divWrapper.style = "margin-top: 12px"
+        titleCounterName.innerText = "Number of characters : "
+        titleCounter.innerText = input.value.length.toString()
+        input.onkeyup = () => {
+            titleCounter.innerText = input.value.length.toString()
+        }
+        let divWrapperDescription = document.createElement("div")
+        let descriptionCounterName = document.createElement("span")
+        let descriptionCounter = document.createElement("strong")
+        let divDescription = document.querySelector(".field-description")
+        let inputDescription = document.querySelector("#id_description")
+        divWrapperDescription.appendChild(descriptionCounterName)
+        divWrapperDescription.appendChild(descriptionCounter)
+        divDescription.appendChild(divWrapperDescription)
+        divWrapperDescription.style = "margin-top: 12px"
+        descriptionCounterName.innerText = "Number of characters : "
+        descriptionCounter.innerText = inputDescription.value.length.toString()
+        inputDescription.onkeyup = () => {
+            descriptionCounter.innerText = inputDescription.value.length.toString()
+        }
+    </script>
+{% endblock %}

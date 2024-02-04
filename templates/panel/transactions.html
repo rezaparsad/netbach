@@ -1,0 +1,64 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}تراکنش ها{% endblock %}
+
+{% block content %}
+    <div class="container rounded-4 border bg-white p-4">
+        <p class="fw-bold">لیست تمام پرداخت‌ های موفق و ناموفق در این بخش وجود دارد.</p>
+        {% if transactions %}
+            <table class="table table-hover mt-5 table-item-dashboard">
+                <thead class="bg-alert">
+                    <th scope="col">#</th>
+                    <th scope="col">توضیحات</th>
+                    <th scope="col">وضعیت</th>
+                    <th scope="col">مبلغ</th>
+                    <th scope="col">تاریخ و ساعت</th>
+                </thead>
+                <tbody style="vertical-align: unset">
+                    {% for transaction in transactions %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ transaction.description }}</td>
+                            <td class="{% if transaction.is_success is True %}text-success{% else %}text-danger{% endif %}">{{ transaction.status_message }}</td>
+                            <td>{{ transaction.amount }}</td>
+                            <td>{{ transaction.created }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination mt-4 d-flex justify-content-center">
+                {% if transactions.number|add:"-3" > 1 %}
+                    <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                       href="?page=1">1</a>
+                    <span class="mx-2">...</span>
+                {% endif %}
+                {% if transactions.has_previous %}
+                    {% for b in '123' %}
+                        {% if transactions.number|add:forloop.counter|add:"-3" > 1 %}
+                            <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                               href="?page={{ transactions.number|add:forloop.counter|add:"-4" }}">{{ transactions.number|add:forloop.counter|add:"-4" }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <button class="btn bg-primary text-white me-2" style="height: 36px; width: 36px; border-radius: 50%">{{ transactions.number }}</button>
+                {% if transactions.has_next %}
+                    {% for b in '123' %}
+                        {% if transactions.paginator.num_pages|add:"1" > transactions.number|add:forloop.counter %}
+                            <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                               href="?page={{ transactions.number|add:forloop.counter }}">{{ transactions.number|add:forloop.counter }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if transactions.paginator.num_pages > transactions.number|add:"3" %}
+                    <span class="mx-2">...</span>
+                    <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                       href="?page={{ transactions.paginator.num_pages }}">{{ transactions.paginator.num_pages }}</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="bg-alert p-3 rounded-4">
+                <span>موردی برای نمایش یافت نشد.</span>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

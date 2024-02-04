@@ -1,0 +1,77 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}تیکت ها{% endblock %}
+
+{% block content %}
+    <div class="container rounded-4 border bg-white p-4">
+        <a href="{% url 'ticket-create' %}" class="btn bg-primary text-white rounded-4">افزودن تیکت جدید</a>
+        <p class="fw-bold mt-4">تمام تیکت های شما در این بخش نمایش داده می شود.</p>
+        {% if sessions %}
+            <table class="table table-hover mt-5 table-item-dashboard">
+                <thead class="bg-alert">
+                <th scope="col">#</th>
+                <th scope="col">عنوان</th>
+                <th scope="col">وضعیت</th>
+                <th scope="col">آخرین بروزرسانی</th>
+                </thead>
+                <tbody style="vertical-align: unset">
+                {% for session in sessions %}
+                    <tr style="cursor: pointer" class="session-item" data-url="{% url 'ticket-detail' session.pk %}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td style="width: 50%">{{ session.title }}</td>
+                        <td class="{% if session.status == 'answer_given' %}text-success{% elif session.status == 'waiting_answer' %}text-warning{% else %}text-danger{% endif %}">{{ session.status_answer }}</td>
+                        <td>{{ session.updated }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination mt-4 d-flex justify-content-center">
+                {% if sessions.number|add:"-3" > 1 %}
+                    <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%"
+                       class="btn me-2"
+                       href="?page=1">1</a>
+                    <span class="mx-2">...</span>
+                {% endif %}
+                {% if sessions.has_previous %}
+                    {% for b in '123' %}
+                        {% if sessions.number|add:forloop.counter|add:"-3" > 1 %}
+                            <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%"
+                               class="btn me-2"
+                               href="?page={{ sessions.number|add:forloop.counter|add:"-4" }}">{{ sessions.number|add:forloop.counter|add:"-4" }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <button class="btn bg-primary text-white me-2"
+                        style="height: 36px; width: 36px; border-radius: 50%">{{ sessions.number }}</button>
+                {% if sessions.has_next %}
+                    {% for b in '123' %}
+                        {% if sessions.paginator.num_pages|add:"1" > sessions.number|add:forloop.counter %}
+                            <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%"
+                               class="btn me-2"
+                               href="?page={{ sessions.number|add:forloop.counter }}">{{ sessions.number|add:forloop.counter }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if sessions.paginator.num_pages > sessions.number|add:"3" %}
+                    <span class="mx-2">...</span>
+                    <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%"
+                       class="btn me-2"
+                       href="?page={{ sessions.paginator.num_pages }}">{{ sessions.paginator.num_pages }}</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="bg-alert p-3 rounded-4">
+                <span>موردی برای نمایش یافت نشد.</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        let sessions = document.querySelectorAll(".session-item")
+        sessions.forEach(session => {
+            session.addEventListener("click", () => {
+                window.location.href = session.dataset.url
+            })
+        })
+    </script>
+{% endblock %}

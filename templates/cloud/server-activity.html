@@ -1,0 +1,64 @@
+{% extends "panel/base.html" %}
+
+{% block title %}فعالیت های سرور{% endblock %}
+
+{% block content %}
+    <div class="container rounded-4 border bg-white p-4 my-3">
+        <p class="fw-bold">در این بخش فعالیت های انجام شده بر روی سرور به شما نمایش داده می شود.</p>
+        {% if activities %}
+            <div class="ptable mt-5">
+                <table class="table table-server">
+                    <thead>
+                        <tr>
+                        <th class="col">نام</th>
+                        <th class="col">فعالیت</th>
+                        <th class="col">تاریخ و ساعت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for activity in activities %}
+                        <tr class="server-detail">
+                            <td class="detail-server-unselect col text-primary">{{ activity.server.name }}</td>
+                            <td class="detail-server-unselect col">{{ activity.activity }}</td>
+                            <td class="detail-server-unselect col">{{ activity.created }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination mt-5 d-flex justify-content-center">
+                {% if activities.number|add:"-3" > 1 %}
+                    <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                       href="?page=1">1</a>
+                    <span class="mx-2">...</span>
+                {% endif %}
+                {% if activities.has_previous %}
+                    {% for b in '123' %}
+                        {% if activities.number|add:forloop.counter|add:"-3" > 1 %}
+                            <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                               href="?page={{ activities.number|add:forloop.counter|add:"-4" }}">{{ activities.number|add:forloop.counter|add:"-4" }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <button class="btn bg-primary text-white me-2" style="height: 36px; width: 36px; border-radius: 50%">{{ activities.number }}</button>
+                {% if activities.has_next %}
+                    {% for b in '123' %}
+                        {% if activities.paginator.num_pages|add:"1" > activities.number|add:forloop.counter %}
+                            <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                               href="?page={{ activities.number|add:forloop.counter }}">{{ activities.number|add:forloop.counter }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if activities.paginator.num_pages > activities.number|add:"3" %}
+                    <span class="mx-2">...</span>
+                    <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                       href="?page={{ activities.paginator.num_pages }}">{{ activities.paginator.num_pages }}</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="bg-alert p-3 rounded-4 mt-5">
+                <span>موردی برای نمایش یافت نشد.</span>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#603695" />
+    <meta name="twitter:site" content="@NetBach">
+    <meta property="og:site_name" content="نت بچ">
+    <meta name="twitter:creator" content="نت بچ">
+
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="twitter:title" content="{% block titletwitter %}{% endblock %}">
+    <meta property="og:title" content="{% block titleog %}{% endblock %}">
+
+    <meta property="og:locale" content="fa_IR">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    {% block head %}{% endblock %}
+    <meta name="google-site-verification" content="Ng1dLxvy1JN-fSbhx3HxZMlr1S6uPNSSsHWj6CUcpcY" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.rtl.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'icons/logo.png' %}">
+    <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Organization",
+      "name" : "netbach",
+      "url" : "https://netbach.com",
+      "sameAs" : [
+        "https://instagram.com/netbach_com",
+        "https://telegram.me/max_novin",
+        "https://youtube.com/@netbach"
+      ]
+    }
+    </script>
+</head>
+<body>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/jquery.slim.min.js' %}"></script>
+<script src="{% static 'js/sudo.js' %}"></script>
+
+{% include 'main/navbar.html' %}
+{% block content %}
+
+{% endblock %}
+{% include "main/footer.html" %}
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8HB670H0MR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8HB670H0MR');
+</script>
+</body>
+</html>

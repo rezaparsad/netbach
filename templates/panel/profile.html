@@ -1,0 +1,140 @@
+{% extends 'panel/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}پروفایل{% endblock %}
+
+{% block content %}
+    <div id="toast-notification" class="toast toast-location position-absolute top-0 mt-3 ms-3 ms-sm-0"
+         role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header d-flex justify-content-end">
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <span id="toast-message" class="text-white"></span>
+        </div>
+    </div>
+    <div class="container rounded-4 border bg-white p-4">
+        <p class="fw-bold">اطلاعات شخصی شما در این بخش وجود دارد.</p>
+        <div class="row form-group mt-4">
+            <div class="col-12 col-sm-6">
+                <label class="mt-3">نام</label>
+                {{ form.first_name|add_class:"form-control mt-2" }}
+            </div>
+            <div class="col-12 col-sm-6">
+                <label class="mt-3">نام خانوادگی</label>
+                {{ form.last_name|add_class:"form-control mt-2" }}
+            </div>
+            <div class="col-12 col-sm-6">
+                <label class="mt-3">ایمیل</label>
+                {{ form.email|add_class:"form-control mt-2" }}
+            </div>
+            <div class="col-12 col-sm-6">
+                <label class="mt-3">شماره موبایل</label>
+                <input type="text" value="{{ user.phone }}" readonly="" class="form-control mt-2">
+            </div>
+            <div class="col-12 col-sm-6">
+                <label class="mt-3">کد ملی</label>
+                {{ form.id_card|add_class:"form-control mt-2" }}
+            </div>
+            <div class="col-12 col-sm-6">
+                <label class="mt-3">کد پستی</label>
+                {{ form.zip_code|add_class:"form-control mt-2" }}
+            </div>
+            <div class="col-12 col-sm-6">
+                <label class="mt-3">استان</label>
+                {{ form.state|add_class:"form-control mt-2" }}
+            </div>
+            <div class="col-12 col-sm-6">
+                <label class="mt-3">شهر</label>
+                {{ form.city|add_class:"form-control mt-2" }}
+            </div>
+            <div class="col-12">
+                <label class="mt-3">آدرس</label>
+                {{ form.address|add_class:"form-control mt-2" }}
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <button id="btn-submit" class="btn btn-success px-5 py-2 rounded-4">
+                <span>ذخیره</span>
+                <div class="d-none spinner-border spinner-border-sm" role="status" id="spinner-loading"></div>
+            </button>
+        </div>
+    </div>
+    <script>
+        const getCookie = (name) => {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrfToken = getCookie('csrftoken');
+
+        async function sendUserInfo(body) {
+            let response = await fetch(".", {
+                method: "POST",
+                headers: {"X-CSRFToken": csrfToken},
+                body: body
+            })
+            return await response.json()
+        }
+
+        function showToast(key) {
+            if (key === "success") {
+                $("#toast-message").text("عملیات با موفقیت انجام شد")
+                $("#toast-notification").removeClass("bg-danger");
+                $("#toast-notification").addClass("bg-success");
+            } else {
+                $("#toast-message").text("عملیات با خطا مواجه شد")
+                $("#toast-notification").removeClass("bg-success");
+                $("#toast-notification").addClass("bg-danger");
+            }
+            window.scrollTo({top: 0, behavior: 'smooth'});
+            $("#toast-notification").toast("show");
+        }
+
+        function getInputValue(id) {
+            return document.querySelector(`#id_${id}`).value
+        }
+
+        function changeShape(key) {
+            btnSubmit.firstElementChild.classList.remove("d-none")
+            btnSubmit.disabled = key
+            spinner.classList.add("d-none")
+        }
+
+        let btnSubmit = document.querySelector("#btn-submit")
+        let spinner = document.querySelector("#spinner-loading")
+        btnSubmit.addEventListener("click", () => {
+            btnSubmit.disabled = true
+            btnSubmit.firstElementChild.classList.add("d-none")
+            spinner.classList.remove("d-none")
+            let values = JSON.stringify({
+                'first_name': getInputValue("first_name"), 'last_name': getInputValue("last_name"),
+                'email': getInputValue("email"), 'id_card': getInputValue("id_card"),
+                'zip_code': getInputValue("zip_code"), 'address': getInputValue("address"),
+                'city': getInputValue("city"), 'state': getInputValue("state")
+            })
+            sendUserInfo(values).then(response => {
+                btnSubmit.disabled = false
+                if (response["response"] === true) {
+                    changeShape(false)
+                    showToast("success")
+                } else {
+                    changeShape(true)
+                    showToast("error")
+                }
+            }).catch(() => {
+                changeShape(false)
+                showToast("error")
+            })
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "panel/base.html" %}
+
+{% block title %}سرور ها{% endblock %}
+
+{% block head %}
+    <style>
+        .wrapper-server:hover {
+            background-color: #f6f6f6;
+            transition: background-color .3s ease-in-out;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container rounded-4 border bg-white p-4">
+        <div class="d-flex">
+            <a href="{% url 'cloud:server-create' %}" class="btn bg-primary text-white">افزودن سرور</a>
+        </div>
+        {% if servers %}
+            <div class="row mt-4">
+                {% for server in servers %}
+                <div class="col-12 col-sm-3 mt-3 mt-sm-0">
+                    <a class="text-decoration-none text-dark" href="{% url 'server-detail' server.slug %}">
+                        <div class="server-detail text-center px-4 pb-0 pt-4 rounded-3 border" style="background-color: #fafafa; cursor: pointer;" data-slug="{{ server.slug }}">
+                            <h3 class="mt-2">{{ server.name }}</h3>
+                            <hr>
+                            <p>{{ server.ipv4 }}</p>
+                            <p class="pb-2">
+                                <span style="margin: auto;">
+                                    <span>{{ server.location.city }}</span>
+                                    <img class="ms-2 rounded" width="48" height="32" src="{{ domain_url }}{{ server.location.image.file.url }}" alt="{{ server.location.name }}">
+                                </span>
+                            </p>
+                            <p>{{ server.created }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="pagination mt-5 d-flex justify-content-center">
+                {% if servers.number|add:"-3" > 1 %}
+                    <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                       href="?page=1">1</a>
+                    <span class="mx-2">...</span>
+                {% endif %}
+                {% if servers.has_previous %}
+                    {% for b in '123' %}
+                        {% if servers.number|add:forloop.counter|add:"-3" > 1 %}
+                            <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                               href="?page={{ servers.number|add:forloop.counter|add:"-4" }}">{{ servers.number|add:forloop.counter|add:"-4" }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <button class="btn bg-primary text-white me-2" style="height: 36px; width: 36px; border-radius: 50%">{{ servers.number }}</button>
+                {% if servers.has_next %}
+                    {% for b in '123' %}
+                        {% if servers.paginator.num_pages|add:"1" > servers.number|add:forloop.counter %}
+                            <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                               href="?page={{ servers.number|add:forloop.counter }}">{{ servers.number|add:forloop.counter }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if servers.paginator.num_pages > servers.number|add:"3" %}
+                    <span class="mx-2">...</span>
+                    <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
+                       href="?page={{ servers.paginator.num_pages }}">{{ servers.paginator.num_pages }}</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="bg-alert p-3 rounded-4 mt-5">
+                <span>موردی برای نمایش یافت نشد.</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        serverDetailElements = document.getElementsByClassName('server-detail');
+        for (var i=0; i<serverDetailElements.length; i++) {
+            let url = serverDetailElements[i].getAttribute('data-url');
+            serverDetailElements[i].addEventListener('click', function () {
+                window.location.href = url;
+            });
+        }
+    </script>
+{% endblock %}
