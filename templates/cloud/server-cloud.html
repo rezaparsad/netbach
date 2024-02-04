@@ -64,62 +64,8 @@
     <div style="background-color: #f1efef">
         <div class="container py-5">
             <div class="row mb-4">
-                {% for server in server_list %}
-                <div class="col-12 col-sm-3 mt-4">
-                    <a title="ساخت سرور ابری" href="{{ cloud_url }}server/create/" class="text-decoration-none text-black"><div class="text-center py-2 rounded-3 border bg-white card-server">
-                        <p class="mt-2 fw-bold fs-5">{{ server.name }}</p>
-                        <hr>
-                        <p>Ram: {{ server.ram }}</p>
-                        <p>CPU: {{ server.cpu }}</p>
-                        <p>Disk: {{ server.disk }}</p>
-                        <p>Traffic: {{ server.traffic }}</p>
-                        <hr>
-                        <p>روزانه: {{ server.price_day }}</p>
-                        <p class="text-success fw-bold">ماهانه: {{ server.price }}</p>
-                    </div></a>
-                </div>
-                {% endfor %}
-            {% if faqs %}
-                <div class="container mt-5 bg-white rounded p-4 d-flex flex-column">
-                    <h3 class="align-self-center mb-3">سوالات متداول</h3>
-                    {% for faq in faqs %}
-                        <div class="d-flex flex-column mt-4">
-                            <strong style="text-align: justify">{{ faq.question }}</strong>
-                            <span style="text-align: justify" class="mt-2">{{ faq.answer }}</span>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+            </div>
         </div>
-    </div>
-    <div class="pagination my-4 d-flex justify-content-center">
-        {% if server_list.number|add:"-3" > 1 %}
-            <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
-               href="?page=1">1</a>
-            <span class="mx-2">...</span>
-        {% endif %}
-        {% if server_list.has_previous %}
-            {% for b in '123' %}
-                {% if server_list.number|add:forloop.counter|add:"-3" > 1 %}
-                    <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
-                       href="?page={{ server_list.number|add:forloop.counter|add:"-4" }}">{{ server_list.number|add:forloop.counter|add:"-4" }}</a>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-        <button class="btn bg-primary text-white me-2" style="height: 36px; width: 36px; border-radius: 50%">{{ server_list.number }}</button>
-        {% if server_list.has_next %}
-            {% for b in '123' %}
-                {% if server_list.paginator.num_pages|add:"1" > server_list.number|add:forloop.counter %}
-                    <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
-                       href="?page={{ server_list.number|add:forloop.counter }}">{{ server_list.number|add:forloop.counter }}</a>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-        {% if server_list.paginator.num_pages > server_list.number|add:"3" %}
-            <span class="mx-2">...</span>
-            <a style="border: 1px solid var(--primary-color-background); height: 36px; width: 36px; border-radius: 50%" class="btn me-2"
-               href="?page={{ server_list.paginator.num_pages }}">{{ server_list.paginator.num_pages }}</a>
-        {% endif %}
     </div>
     <div class="my-5 mx-2 mx-sm-1">
         <div class="border shadow-sm rounded container">

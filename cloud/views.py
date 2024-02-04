@@ -121,19 +121,4 @@ def category(request, slug):
 
 def category_main(request):
     cat = get_object_or_404(Category, slug='home')
-    server_list = Server.objects.filter(category=cat, is_active=True).order_by('price')
-    page = request.GET.get('page', '1')
-    pages = Paginator(server_list, 25)
-    try:
-        server_list = pages.page(page)
-    except:
-        raise Http404
-    for server in server_list:
-        server.price_day = int(server.price / 30)
-        server.price_day = human_readable_size(server.price_day, price=True)
-        server.ram = human_readable_size(server.ram)
-        server.cpu = human_readable_size(server.cpu, cpu=True)
-        server.disk = human_readable_size(server.disk)
-        server.traffic = human_readable_size(server.traffic)
-        server.price = human_readable_size(server.price, price=True)
     return render(request, 'cloud/server-cloud.html', {'server_list': server_list, 'page': cat})
