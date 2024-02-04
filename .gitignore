@@ -1,0 +1,6 @@
+venv
+00*
+__pycache__
+test.py
+db.sqlite3
+media
