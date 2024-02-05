@@ -118,7 +118,7 @@ def category(request, slug):
         server.disk = human_readable_size(server.disk)
         server.traffic = human_readable_size(server.traffic)
         server.price = human_readable_size(server.price, price=True)
-    faqs = FAQ.objects.filter(page=Category, is_active=True)
+    faqs = FAQ.objects.filter(category=Category, is_active=True)
     return render(
         request, 
         'cloud/server-cloud-list.html', 
@@ -127,7 +127,7 @@ def category(request, slug):
 
 def category_main(request):
     cat = get_object_or_404(Category, slug='home')
-    faqs = FAQ.objects.filter(page=Category, is_active=True)
+    faqs = FAQ.objects.filter(category=Category, is_active=True)
     return render(
         request, 'cloud/server-cloud.html', 
         {'server_list': server_list, 'page': cat, 'blogs': last_blogs(), 'faqs': faqs}
