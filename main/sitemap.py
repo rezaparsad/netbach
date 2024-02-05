@@ -7,6 +7,7 @@ from django.urls import reverse
 from blog.models import Blog
 from config.settings import PAGINATION_SITEMAP
 from .models import Page
+from cloud.models import Category
 
 
 class PageListSitemap(Sitemap):
@@ -47,6 +48,12 @@ class IndexListSitemap(Sitemap):
             item.append({'url': f'/sitemap-page{i}.xml', 'updated': page_obj[-1].updated})
 
         post_list = Blog.objects.filter(is_active=True)
+        count_post = ceil(post_list.count()/PAGINATION_SITEMAP)
+        for i in range(1, count_post+1):
+            page_obj = Paginator(post_list, PAGINATION_SITEMAP).page(i)
+            item.append({'url': f'/sitemap-blog{i}.xml', 'updated': page_obj[-1].updated})
+        
+        post_list = Category.objects.filter(is_active=True)
         count_post = ceil(post_list.count()/PAGINATION_SITEMAP)
         for i in range(1, count_post+1):
             page_obj = Paginator(post_list, PAGINATION_SITEMAP).page(i)
