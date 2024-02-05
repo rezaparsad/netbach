@@ -56,10 +56,7 @@ class DataCenter(models.Model):
 
 
 class Category(models.Model):
-    reply = None
-
     user = models.ForeignKey(User, models.PROTECT, related_name='cloud_server_category_user')
-    reply_id = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=150)
     content = models.TextField()
     is_active = models.BooleanField(default=True)
@@ -157,3 +154,15 @@ class ActivityServer(models.Model):
     activity = models.CharField(max_length=30, choices=ACTIVITY_CHOICES)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+class FAQ(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='cloud_server_faq')
+    category = models.ForeignKey(Category, models.CASCADE)
+    question = models.TextField()
+    answer = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.question

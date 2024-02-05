@@ -22,19 +22,10 @@ def blog(request, slug):
     else:
         p = get_object_or_404(Blog, slug=slug, is_active=True)
     p.increase_view()
-    p.created = get_date_persian(p.created)
-    p.updated = get_date_persian(p.updated)
+    p.created, p.updated = get_date_persian(p.created), get_date_persian(p.updated)
     first_category = p.category.first()
     blogs = list(Blog.objects.all().exclude(pk=p.pk).order_by("-created"))
     newest_blogs = blogs[:10]
-    related_blogs = blogs
-    count_related_blogs = 10
-    if len(related_blogs) > count_related_blogs:
-        related_blogs = []
-        for i in range(count_related_blogs):
-            chosen_blog = random.choice(blogs)
-            related_blogs.append(chosen_blog)
-            blogs.remove(chosen_blog)
     breadcrumbs = [p, first_category]
     if first_category.reply_id:
         x = Category.objects.get(pk=first_category.reply_id, is_active=True)
@@ -46,7 +37,7 @@ def blog(request, slug):
             breadcrumbs.append(x)
     breadcrumbs = list(reversed(breadcrumbs))
     return render(request, 'blog/blog.html', {
-        'blog': p, "category": first_category, "breadcrumbs": breadcrumbs, "related_blogs": related_blogs,
+        'blog': p, "category": first_category, "breadcrumbs": breadcrumbs,
         "star": p.get_starts(), "newest_blogs": newest_blogs
     })
 

@@ -8,7 +8,7 @@ from django.urls import reverse
 from account.utility import human_readable_size
 from config.settings import PAGINATION_SERVERS, API_URL
 from .forms import CreateServerCloudFrom
-from .models import Server, ServerRent, ActivityServer, Location, Category
+from .models import Server, ServerRent, ActivityServer, Location, Category, FAQ
 from blog.views import last_blogs
 
 
@@ -118,15 +118,17 @@ def category(request, slug):
         server.disk = human_readable_size(server.disk)
         server.traffic = human_readable_size(server.traffic)
         server.price = human_readable_size(server.price, price=True)
+    faqs = FAQ.objects.filter(page=Category, is_active=True)
     return render(
         request, 
         'cloud/server-cloud-list.html', 
-        {'server_list': server_list, 'page': cat, 'blogs': last_blogs()}
+        {'server_list': server_list, 'page': cat, 'blogs': last_blogs(), 'faqs': faqs}
     )
 
 def category_main(request):
     cat = get_object_or_404(Category, slug='home')
+    faqs = FAQ.objects.filter(page=Category, is_active=True)
     return render(
         request, 'cloud/server-cloud.html', 
-        {'server_list': server_list, 'page': cat, 'blogs': last_blogs()}
+        {'server_list': server_list, 'page': cat, 'blogs': last_blogs(), 'faqs': faqs}
     )
