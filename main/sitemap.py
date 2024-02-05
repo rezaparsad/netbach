@@ -57,7 +57,7 @@ class IndexListSitemap(Sitemap):
         count_post = ceil(post_list.count()/PAGINATION_SITEMAP)
         for i in range(1, count_post+1):
             page_obj = Paginator(post_list, PAGINATION_SITEMAP).page(i)
-            item.append({'url': f'/sitemap-blog{i}.xml', 'updated': page_obj[-1].updated})
+            item.append({'url': f'/sitemap-cloud_server{i}.xml', 'updated': page_obj[-1].updated})
         
         return item
 
