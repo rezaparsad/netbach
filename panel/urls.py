@@ -29,6 +29,7 @@ from .views import (
 app_name = "panel"
 
 urlpatterns = [
+    path('robots.txt', TemplateView.as_view(template_name='files/panel-robots.txt', content_type='text/plain'), name='panel-robots'),
     path('increase-credit/', increase_credit, name="increase-credit"),
     path('ticket/list/', ticket_list, name='ticket-list'),
     path('ticket/edit/<int:pk>/', ticket_detail, name='ticket-detail'),
