@@ -6,11 +6,17 @@
 h1, h2 {
     font-weight: bold;
     font-size: 1.25rem !important;
+    margin-top: 1.9rem !important;
 }
 
 h3, h4, h5, h6 {
     font-weight: bold;
     font-size: 1rem !important;
+    margin-top: 1.9rem !important;
+}
+
+p {
+    margin-top: 1rem !important;
 }
 
 @media only screen and (max-width: 575px) {
