@@ -8,7 +8,7 @@
         {% for ticket in tickets %}
             <div class="d-flex flex-column p-sm-4 mt-4 mt-sm-0">
                 <div class="d-flex flex-column rounded border px-4 py-2" style="background-color: #f1ffff">
-                    <strong>{% if ticket.user.is_staff %}پشتیبانی مکس نوین{% else %}شما{% endif %}</strong>
+                    <strong>{% if ticket.user.is_staff %}پشتیبانی نت بچ{% else %}شما{% endif %}</strong>
                     <span class="mt-2" style="font-size: 0.8rem; color: #636e72">{{ ticket.created }}</span>
                 </div>
                 <span class="mt-3 mx-5">{{ ticket.content }}</span>
