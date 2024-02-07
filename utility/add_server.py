@@ -12,7 +12,7 @@ from cloud.models import Server, DataCenter, OperationSystem, Location
 
 
 datacenter_name = "Linode"
-maxnovin = User.objects.get(username="maxnovin")
+netbach = User.objects.get(username="netbach")
 datacenter = DataCenter.objects.get(name=datacenter_name)
 operation_systems = ['AlmaLinux 8', 'AlmaLinux 9', 'Alpine 3.15', 'Alpine 3.16', 'Alpine 3.17', 'Alpine 3.18', 'Arch Linux', 'CentOS 7', 'CentOS Stream 8', 'CentOS Stream 9', 'Debian 10', 'Debian 11', 'Debian 12', 'Fedora 36', 'Fedora 37', 'Fedora 38', 'Gentoo', 'Kali Linux', 'openSUSE Leap 15.4', 'openSUSE Leap 15.5', 'Rocky Linux 8', 'Rocky Linux 9', 'Slackware 15.0', 'Slackware 14.1', 'Ubuntu 20.04 LTS', 'Ubuntu 22.04 LTS', 'Ubuntu 22.10', 'Ubuntu 23.04', 'Ubuntu 23.10']
 os = OperationSystem.objects.filter(name__in=operation_systems)
@@ -31,7 +31,7 @@ price_usd = 55000
 amount_usd = float(input("Enter amount usd: "))
 profit = 20000
 server = Server.objects.create(
-    user=maxnovin,
+    user=netbach,
     datacenter=datacenter,
     slug=slug,
     name=name,

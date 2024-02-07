@@ -12,7 +12,7 @@ from cloud.models import ServerRent, Token
 
 servers = ServerRent.objects.filter(is_active=False)
 for server in servers:
-    server.token = Token.objects.get(name__iexact="mohsen", datacenter=server.datacenter)
+    server.token = Token.objects.get(name__iexact="reza", datacenter=server.datacenter)
     server.save()
 
 print("done")

@@ -20,7 +20,7 @@ from django.contrib.humanize.templatetags import humanize
 
 red, green, yellow, purple, default = '\033[31m', '\033[32m', '\033[33m', '\033[35m', '\033[0m'
 app = Client(
-    "maxnovin",
+    "netbach",
     api_id=1296817,
     api_hash='bfcc80f70227102061e5f20edfa11185',
     bot_token='6782747675:AAGmaUq7QsLhgQ0jhNShiqMMw4CwXFGJBq4',
@@ -34,7 +34,7 @@ async def private_message(message):
     text = message.text
 
     if text == "/start":
-        await message.reply("Welcome to Maxnovin bot !")
+        await message.reply("Welcome to NetBach bot !")
 
     elif text == "/traffic":
         await message.reply("Getting data from datacenters ... !")
@@ -71,7 +71,7 @@ async def private_message(message):
     elif message.reply_to_message and message.reply_to_message.text:
         ticket_pk = int(message.reply_to_message.text.split("\n")[0].split(" ")[-1])
         ticket = Ticket.objects.get(pk=ticket_pk)
-        admin_user = User.objects.get(username="maxnovin")
+        admin_user = User.objects.get(username="netbach")
         Ticket.objects.create(user=admin_user, pack=ticket.pack, content=text)
         ticket.pack.status = "answer_given"
         ticket.pack.save()
@@ -117,7 +117,7 @@ async def main():
     await app.start()
     info = await app.get_me()
     print("\n")
-    print(green + f'>>> Bot Maxnovin is online !')
+    print(green + f'>>> Bot NetBach is online !')
     print(red + '   >>> ' + yellow + f'First Name : {info.first_name}')
     print(red + '   >>> ' + yellow + f'User Id : {info.id}')
     print(red + '   >>> ' + yellow + f'UserName : {info.username}')

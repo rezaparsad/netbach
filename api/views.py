@@ -178,7 +178,7 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
         if len(operation_systems) < 1 or len(locations) < 1:
             return Response({'status': False, 'message': 'فرم را درست پر کنید'})
         last_server_rent = ServerRent.objects.last()
-        name = "Maxnovin-" + str((last_server_rent.pk + 1) if last_server_rent else 0)
+        name = "NetBach-" + str((last_server_rent.pk + 1) if last_server_rent else 0)
         client = get_datacenter(server)
         if client is None:
             return Response({'status': False, 'message': 'سرور یافت نشد'})

@@ -4,7 +4,7 @@ let items = document.querySelectorAll(".dashboard-menu-items-list")
             let url = document.URL.split("/")
             let hostname = document.location.host
             if (hostname.includes('127.0.0.1:8002')) {
-                hostname = 'cloud.maxnovin.com';
+                hostname = 'panel.netbach.com';
             }
             let lastPart = url[url.length - 2];
             let firstPart = url[3];
