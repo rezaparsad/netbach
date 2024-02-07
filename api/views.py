@@ -216,7 +216,7 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
                 credit_amount=wallet.amount,
             )
             del res["server"]
-            res["next"] = reverse('server-info', urlconf='cloud.urls', args=[server_rent.slug])
+            res["next"] = '/cloud' + reverse('server-info', urlconf='cloud.urls', args=[server_rent.slug])
             ActivityServer.objects.create(
                 user=request.user,
                 server=server_rent,
@@ -367,7 +367,7 @@ class ServerCloudRentViewSet(ViewSet):
         if response["status"] is True:
             server.is_active = False
             server.save()
-            response["next"] = reverse("server-list", urlconf="cloud.urls")
+            response["next"] = '/cloud' + reverse("server-list", urlconf="cloud.urls")
             ActivityServer.objects.create(
                 user=request.user,
                 server=server,
