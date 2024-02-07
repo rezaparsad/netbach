@@ -53,11 +53,11 @@ class TokenAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     exclude = ('user', )
     form = CategoryAdminFrom
+    list_display = ('slug', 'name')
+    list_display_links = ('slug', 'name')
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
-        if form.cleaned_data['reply_id'] == '':
-            obj.reply_id = None
         super().save_model(request, obj, form, change)
 
 

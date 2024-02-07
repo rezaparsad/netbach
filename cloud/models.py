@@ -71,6 +71,10 @@ class Category(models.Model):
     description = models.CharField(max_length=255, null=True, blank=True)
     image_meta = models.ForeignKey(Media, on_delete=models.CASCADE, related_name='cloud_server_category_imagemeta', null=True, blank=True)
 
+    def __str__(self) -> str:
+        return self.slug
+
+
 class Server(models.Model):
     CHOICES_TYPE_DISK = (
         ('ssd', 'SSD'),
