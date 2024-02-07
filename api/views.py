@@ -304,7 +304,7 @@ class ServerCloudRentViewSet(ViewSet):
         if is_server_limit:
             return Response({"status": False, "message": f"لطفا پس از {ttl} ثانیه دیگر دوباره تلاش کنید"})
         user_wallet = Wallet.objects.get(user=server.user)
-        price_change_ip = 1000
+        price_change_ip = 2500
         if user_wallet.amount < price_change_ip:
             return Response({"status": False, "message": f"موجودی شما کمتر از {price_change_ip} تومان میباشد"})
         set_server_limit(server, action_name)
