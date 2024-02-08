@@ -121,7 +121,7 @@ async def main():
     print(red + '   >>> ' + yellow + f'First Name : {info.first_name}')
     print(red + '   >>> ' + yellow + f'User Id : {info.id}')
     print(red + '   >>> ' + yellow + f'UserName : {info.username}')
-    print(green + '>>> Written By Mohsen Mesi !' + default)
+    print(green + '>>> Written By Reza Parsa !' + default)
     asyncio.get_event_loop().create_task(check_for_new_ticket())
 
 
