@@ -12,7 +12,7 @@ class ServerAdmin(admin.ModelAdmin):
     ordering = ("-is_active", )
 
     def get_price(self, obj):
-        return humanize.intcomma(obj.price)
+        return humanize.intcomma(obj.price_monthly)
 
 
 class ServerRentAdmin(admin.ModelAdmin):
