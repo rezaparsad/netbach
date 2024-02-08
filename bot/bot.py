@@ -23,7 +23,7 @@ app = Client(
     "netbach",
     api_id=1296817,
     api_hash='bfcc80f70227102061e5f20edfa11185',
-    bot_token='6782747675:AAGmaUq7QsLhgQ0jhNShiqMMw4CwXFGJBq4',
+    bot_token='6760615561:AAEdN2HxB9-cKZvo8rbpbK6vnEek3L-KkYE',
     lang_code='en'
 )
 admins = [5397346417]
