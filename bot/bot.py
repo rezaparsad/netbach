@@ -26,7 +26,7 @@ app = Client(
     bot_token='6760615561:AAEdN2HxB9-cKZvo8rbpbK6vnEek3L-KkYE',
     lang_code='en'
 )
-admins = [5397346417]
+admins = [1799980896]
 
 
 async def private_message(message):
