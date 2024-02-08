@@ -33,16 +33,15 @@ def server_list(request):
 
 @login_required()
 def server_create(request):
-    servers = Server.objects.filter(is_active=True).order_by("price")
+    servers = Server.objects.filter(is_active=True).order_by("price_monthly")
     locations = Location.objects.filter(is_active=True)
     for server in servers:
-        server.price_day = int(server.price / 30)
-        server.price_day = human_readable_size(server.price_day, price=True)
+        server.price_day = human_readable_size(server.price_daily, price=True)
         server.ram = human_readable_size(server.ram)
         server.cpu = human_readable_size(server.cpu, cpu=True)
         server.disk = human_readable_size(server.disk)
         server.traffic = human_readable_size(server.traffic)
-        server.price = human_readable_size(server.price, price=True)
+        server.price = human_readable_size(server.price_monthly, price=True)
     page = request.GET.get('page', '1')
     url_api_server_list = API_URL[:-1] + reverse('server-list', 'api.urls') + f'?page={page}'
     return render(
@@ -111,8 +110,7 @@ def category(request, slug):
     except:
         raise Http404
     for server in server_list:
-        server.price_day = int(server.price / 30)
-        server.price_day = human_readable_size(server.price_day, price=True)
+        server.price_day = human_readable_size(server.price_daily, price=True)
         server.ram = human_readable_size(server.ram)
         server.cpu = human_readable_size(server.cpu, cpu=True)
         server.disk = human_readable_size(server.disk)

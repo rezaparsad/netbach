@@ -102,8 +102,8 @@ class Server(models.Model):
     type_disk = models.CharField(max_length=15, choices=CHOICES_TYPE_DISK)
     traffic = models.CharField(max_length=24)
     port = models.CharField(max_length=24)
-    price = models.IntegerField(default=0)
-    price_discount = models.IntegerField(default=0)
+    price_monthly = models.IntegerField(default=0)
+    price_daily = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -113,6 +113,10 @@ class Server(models.Model):
 
 
 class ServerRent(models.Model):
+    CHOICES_PERIOD = (
+        ('daily', 'روزانه'),
+        ('monthly', 'ماهانه'),
+    )
     user = models.ForeignKey(User, models.PROTECT)
     server = models.ForeignKey(Server, models.CASCADE)
     datacenter = models.ForeignKey(DataCenter, models.CASCADE)
@@ -126,6 +130,7 @@ class ServerRent(models.Model):
     ipv6 = models.CharField(max_length=40)
     username = models.CharField(max_length=48)
     password = models.CharField(max_length=80)
+    payment_period = models.CharField(max_length=20, choices=CHOICES_PERIOD, default=CHOICES_PERIOD[0][0])
     is_active = models.BooleanField(default=True)
     expire = models.DateTimeField()
     created = models.DateTimeField(auto_now_add=True)

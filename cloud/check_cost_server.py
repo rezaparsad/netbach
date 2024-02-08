@@ -36,7 +36,7 @@ def check_servers():
                     fa_time = jdatetime.datetime.fromgregorian(datetime=datetime.datetime.now()).strftime(
                         '%Y/%m/%d | %H:%M:%S')
                     user_wallet = Wallet.objects.get(user=server.user)
-                    price_per_day = server.server.price // 30
+                    price_per_day = server.server.price_daily
                     if user_wallet.amount < price_per_day:
                         datacenter = get_datacenter(server)
                         if datacenter is None:

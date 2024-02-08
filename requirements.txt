@@ -13,6 +13,9 @@ jdatetime==4.1.1
 linode-api4==5.9.0
 Pillow==10.1.0
 polling==0.3.2
+pyaes==1.6.1
+Pyrogram==2.0.106
+PySocks==1.7.1
 python-dateutil==2.8.2
 pytz==2023.3.post1
 redis==5.0.1

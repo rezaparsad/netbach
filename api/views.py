@@ -170,7 +170,7 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
             return Response({'status': False, 'message': 'فرم را درست پر کنید'})
         server = get_object_or_404(ServerCloud, slug=slug)
         wallet = Wallet.objects.get(user=request.user)
-        price_per_day = server.price / 30
+        price_per_day = server.price_daily
         if wallet.amount < price_per_day:
             return Response({'status': False, 'message': 'شارژ حساب شما برای افزودن سرور کافی نیست'})
         operation_systems = server.os.filter(name=form.cleaned_data['os'])
