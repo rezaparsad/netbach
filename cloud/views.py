@@ -64,7 +64,7 @@ def server_detail(request, slug):
     server.server.cpu = human_readable_size(server.server.cpu, cpu=True)
     server.server.disk = human_readable_size(server.server.disk)
     server.server.traffic = human_readable_size(server.server.traffic)
-    server.server.price = human_readable_size(server.server.price, price=True)
+    server.server.price = human_readable_size(server.server.price_monthly, price=True)
     server.cost = human_readable_size(server.cost, price=True)
     for activity in activities:
         for a in ActivityServer.ACTIVITY_CHOICES:
@@ -102,7 +102,7 @@ def server_info(request, slug):
 
 def category(request, slug):
     cat = get_object_or_404(Category, slug=slug)
-    server_list = Server.objects.filter(category=cat, is_active=True).order_by('price')
+    server_list = Server.objects.filter(category=cat, is_active=True).order_by('price_monthly')
     page = request.GET.get('page', '1')
     pages = Paginator(server_list, 25)
     try:
@@ -115,7 +115,7 @@ def category(request, slug):
         server.cpu = human_readable_size(server.cpu, cpu=True)
         server.disk = human_readable_size(server.disk)
         server.traffic = human_readable_size(server.traffic)
-        server.price = human_readable_size(server.price, price=True)
+        server.price = human_readable_size(server.price_monthly, price=True)
     faqs = FAQ.objects.filter(category=cat, is_active=True)
     return render(
         request, 
