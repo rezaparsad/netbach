@@ -152,7 +152,7 @@ class ServerCloudList(LoginRequiredMixin, ListAPIView):
         return super().list(request, *args, **kwargs)
 
     def get_queryset(self):
-        servers = ServerCloud.objects.filter(is_active=True).order_by("price")
+        servers = ServerCloud.objects.filter(is_active=True).order_by("price_monthly")
         # page = self.request.GET.get('page', '1')
         # pages = Paginator(servers, 20)
         # try:
