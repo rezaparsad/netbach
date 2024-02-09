@@ -14,7 +14,8 @@ class ServerCloudSerializer(serializers.ModelSerializer):
     disk = serializers.SerializerMethodField('get_disk')
     traffic = serializers.SerializerMethodField('get_traffic')
     price = serializers.SerializerMethodField('get_price')
-    price_day = serializers.SerializerMethodField('get_price_day')
+    price_daily = serializers.SerializerMethodField('get_price_daily')
+    price_monthly = serializers.SerializerMethodField('get_price_monthly')
 
     class Meta:
         model = Server
@@ -60,7 +61,7 @@ class ServerCloudSerializer(serializers.ModelSerializer):
         return human_readable_size(obj.traffic)
     
     def get_price(self, obj):
-        return human_readable_size(obj.price, price=True)
+        return human_readable_size(obj.price_month_ly, price=True)
     
-    def get_price_day(self, obj):
-        return human_readable_size(int(obj.price/30), price=True)
+    def get_price_daily(self, obj):
+        return human_readable_size(int(obj.price_daily), price=True)
