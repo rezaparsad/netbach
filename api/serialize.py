@@ -29,7 +29,6 @@ class ServerCloudSerializer(serializers.ModelSerializer):
             'port',
             'price_monthly',
             'price_daily',
-            'price_discount',
             'operation_systems',
             'locations',
             'datacenter',
