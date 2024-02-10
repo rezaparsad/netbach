@@ -170,8 +170,8 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
             return Response({'status': False, 'message': 'فرم را درست پر کنید'})
         server = get_object_or_404(ServerCloud, slug=slug)
         wallet = Wallet.objects.get(user=request.user)
-        price_per_day = server.price_daily
-        if wallet.amount < price_per_day:
+        price = server.price_daily if form.cleaned_data['duration'] == 'daily' else server.price_monthly
+        if wallet.amount < price:
             return Response({'status': False, 'message': 'شارژ حساب شما برای افزودن سرور کافی نیست'})
         operation_systems = server.os.filter(name=form.cleaned_data['os'])
         locations = server.location.filter(city=form.cleaned_data['location'])
@@ -190,7 +190,7 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
             form.cleaned_data['location']
         )
         if res["status"] is True:
-            wallet.amount -= price_per_day
+            wallet.amount -= price
             wallet.save()
             server_created = res["server"]
             server_rent = ServerRent.objects.create(
@@ -206,13 +206,14 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
                 name=server.name,
                 ipv4=server_created.ipv4,
                 ipv6=server_created.ipv6,
-                cost=price_per_day,
-                expire=datetime.datetime.now() + datetime.timedelta(days=1)
+                cost=price,
+                expire=datetime.datetime.now() + datetime.timedelta(days=1 if form.cleaned_data['duration'] == 'daily' else 30),
+                payment_duration=form.cleaned_data['duration']
             )
             ServerCost.objects.create(
                 user=request.user,
                 server=server_rent,
-                cost_amount=price_per_day,
+                cost_amount=price,
                 credit_amount=wallet.amount,
             )
             del res["server"]

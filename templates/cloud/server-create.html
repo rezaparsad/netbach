@@ -70,13 +70,20 @@
         {% endif %}
     </div>
     <div class="container bg-white rounded-3 p-4">
-        <select class="form-select form-select-os mx-auto" name="" id="os-server" onchange="onchangeOS(this)">
-        </select>
+        <div class="text-center">
+            <p class="mb-2">سیستم عامل</p>
+            <select class="form-select form-select-os mx-auto" name="" id="os-server" onchange="onchangeOS(this)">
+            </select>
+        </div>
         <form action="." method="post" class="text-center">
             {% csrf_token %}
             {{ form.slug|attr:"type:hidden" }}
             {{ form.os|attr:"type:hidden" }}
             {{ form.location|attr:"type:hidden" }}
+            <div class="mt-5 text-center">
+                <p class="mb-2">دوره پرداخت</p>
+                {{ form.duration|add_class:"form-select form-select-os mx-auto" }}
+            </div>
             <div id="submit-create-server" class="btn-create-server btn bg-primary text-white fs-5 py-2 px-5 mt-4">خرید</div>
         </form>
     </div>
@@ -297,11 +304,12 @@
             let locationElement = document.getElementById('id_location');
             let osElement = document.getElementById('id_os');
             let slugElement = document.getElementById('id_slug')
+            let durationElement = document.getElementById('id_duration')
             let response = await fetch(`{{ api_url }}server/cloud/buy/${slugElement.value}/`, {
                 method: "POST",
                 credentials: 'include',
                 headers: {"X-CSRFToken": getCookie('csrftoken'), 'Content-Type': 'application/json'},
-                body: JSON.stringify({"slug": slugElement.value, "os": osElement.value, "location": locationElement.value})
+                body: JSON.stringify({"slug": slugElement.value, "os": osElement.value, "location": locationElement.value, "duration": durationElement.value})
             })
             let responseJson = await response.json();
             if (responseJson["status"] === false) {

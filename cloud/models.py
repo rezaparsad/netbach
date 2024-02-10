@@ -113,7 +113,7 @@ class Server(models.Model):
 
 
 class ServerRent(models.Model):
-    CHOICES_PERIOD = (
+    CHOICES_DURATION = (
         ('daily', 'روزانه'),
         ('monthly', 'ماهانه'),
     )
@@ -130,7 +130,7 @@ class ServerRent(models.Model):
     ipv6 = models.CharField(max_length=40)
     username = models.CharField(max_length=48)
     password = models.CharField(max_length=80)
-    payment_period = models.CharField(max_length=20, choices=CHOICES_PERIOD, default=CHOICES_PERIOD[0][0])
+    payment_duration = models.CharField(max_length=20, choices=CHOICES_DURATION, default=CHOICES_DURATION[0][0])
     is_active = models.BooleanField(default=True)
     expire = models.DateTimeField()
     created = models.DateTimeField(auto_now_add=True)

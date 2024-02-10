@@ -36,8 +36,8 @@ def check_servers():
                     fa_time = jdatetime.datetime.fromgregorian(datetime=datetime.datetime.now()).strftime(
                         '%Y/%m/%d | %H:%M:%S')
                     user_wallet = Wallet.objects.get(user=server.user)
-                    price_per_day = server.server.price_daily
-                    if user_wallet.amount < price_per_day:
+                    price = server.server.price_daily if server.payment_duration == server.CHOICES_DURATION[0][0] else server.server.price_monthly
+                    if user_wallet.amount < price:
                         datacenter = get_datacenter(server)
                         if datacenter is None:
                             print(f"datacenter not found ! --- {server.user.phone}--- {server.ipv4} --- {server.slug} --- {fa_time}")
@@ -50,18 +50,18 @@ def check_servers():
                             print(f"error in delete server --- {server.user.phone}--- {server.ipv4} --- {server.slug} --- {fa_time}")
                             print(response["error"])
                     else:
-                        user_wallet.amount -= price_per_day
+                        user_wallet.amount -= price
                         user_wallet.save()
-                        server.cost += price_per_day
+                        server.cost += price
                         server.expire += datetime.timedelta(days=1)
                         server.save()
                         ServerCost.objects.create(
                             user=server.user,
                             server=server,
-                            cost_amount=price_per_day,
+                            cost_amount=price,
                             credit_amount=user_wallet.amount,
                         )
-                        print(f"[+] --- {server.user.phone} --- {server.ipv4} --- {price_per_day} --- {fa_time}")
+                        print(f"[+] --- {server.user.phone} --- {server.ipv4} --- {price} --- {fa_time}")
         except Exception as e:
             print(e)
         finally:

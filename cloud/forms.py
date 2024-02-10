@@ -1,12 +1,13 @@
 from django import forms
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
-from .models import Category
+from .models import ServerRent
 
 
 class CreateServerCloudFrom(forms.Form):
     slug = forms.CharField(max_length=20)
     os = forms.CharField(max_length=30)
     location = forms.CharField(max_length=50)
+    duration = forms.ChoiceField(choices=ServerRent.CHOICES_DURATION)
 
 
 class InlineTokenForm(forms.ModelForm):
