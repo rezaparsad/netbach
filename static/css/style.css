@@ -30,7 +30,8 @@ p {
         align-self: center !important;
         cursor: pointer;
         border-radius: 8px;
-        margin-top: 10px;
+        margin-top: 20px;
+        max-width: 900px;
     }
 
     .login-card {
@@ -98,7 +99,8 @@ p {
         align-self: center !important;
         cursor: pointer;
         border-radius: 8px;
-        margin-top: 10px;
+        margin-top: 20px;
+        max-width: 900px;
     }
 
     .video-size {
