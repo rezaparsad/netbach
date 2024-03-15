@@ -92,7 +92,7 @@ p {
     }
 
     .img-editor {
-        width: 50% !important;
+        width: 100% !important;
         height: 100% !important;
         align-self: center !important;
         cursor: pointer;
