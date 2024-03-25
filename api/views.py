@@ -15,7 +15,7 @@ from rest_framework.viewsets import ViewSet
 from account.models import User
 from account.utility import is_phone_correct, get_user_agent, send_code, login_register_user, check_amount
 from blog.models import Blog
-from cloud.forms import CreateServerCloudFrom
+from cloud.forms import CreateServerCloudFrom, ChangeDurationForm
 from cloud.models import Server as ServerCloud, ServerRent, ActivityServer
 from config.settings import redis, PANEL_URL
 from wallet.gateway import ZarinPalRequest
@@ -305,7 +305,7 @@ class ServerCloudRentViewSet(ViewSet):
         if is_server_limit:
             return Response({"status": False, "message": f"لطفا پس از {ttl} ثانیه دیگر دوباره تلاش کنید"})
         user_wallet = Wallet.objects.get(user=server.user)
-        price_change_ip = 2500
+        price_change_ip = 4500
         if user_wallet.amount < price_change_ip:
             return Response({"status": False, "message": f"موجودی شما کمتر از {price_change_ip} تومان میباشد"})
         set_server_limit(server, action_name)
@@ -374,4 +374,26 @@ class ServerCloudRentViewSet(ViewSet):
                 server=server,
                 activity=action_name
             )
+        return Response(response)
+    
+    @action(methods=["post"], detail=True, url_path='change-duration')
+    def change_duration(self, request, slug):
+        action_name = 'change_duration'
+        server = get_object_or_404(ServerRent, user=request.user, slug=slug, is_active=True)
+        self.check_object_permissions(request, server)
+        response = {'status': True, 'message': 'عملیات با وفقیت انجام شد'}
+        form = ChangeDurationForm(request.POST)
+        if not form.is_valid():
+            return Response({'status': False, 'message': 'فرم را به درستی پر کنید'})
+        if form.cleaned_data['payment_duration'] != server.payment_duration:
+            wallet = Wallet.objects.get(user=request.user)
+            price = server.server.price_daily if form.cleaned_data['payment_duration'] == 'daily' else server.server.price_monthly
+            if wallet.amount < price:
+                return Response({'status': False, 'message': 'شارژ حساب شما برای تغییر زمان پرداخت سرور کافی نیست'})
+            server.payment_duration = form.cleaned_data['payment_duration']
+            days = 1 if server.payment_duration == 'daily' else 30
+            server.expire += datetime.timedelta(days=days)
+            server.save()
+            wallet.amount -= price
+            wallet.save()
         return Response(response)

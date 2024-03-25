@@ -1,4 +1,5 @@
 {% extends "panel/base.html" %}
+{% load widget_tweaks %}
 
 {% block title %}مشخصات سرور{% endblock %}
 
@@ -79,7 +80,7 @@
             <span>از منوی زیر می توانید عملیات مربوط به سرور را انجام دهید</span>
         </div>
         <div class="d-flex justify-content-center rounded p-3 mt-3" style="background-color: #d9d605">
-            <span>هزینه تعویض آیپی سرور ، 2500 تومان می باشد</span>
+            <span>هزینه تعویض آیپی سرور ، 4500 تومان می باشد</span>
         </div>
         <div id="wrapper-root-password" class="d-none justify-content-center bg-success rounded mt-3 p-3">
             <span class="text-white">رمز جدید سرور : </span>
@@ -94,6 +95,13 @@
             <button onclick="showToast('success', 'آیپی سرور و سیستم عامل جدید را در تیکت برای پشتیبانی ارسال کنید تا مراحل انجام شود')" class="btn bg-primary text-white mt-3 mt-sm-0">نصب مجدد سرور</button>
             <button onclick="showToast('success', 'آیپی سرور و مشخصات جدید را در تیکت برای پشتیبانی ارسال کنید تا مراحل انجام شود')" class="btn bg-primary text-white mt-3 mt-sm-0">ارتقاء سرور</button>
             <button onclick="serverAction('delete')" class="btn bg-danger text-white mt-3 mt-sm-0">حذف سرور</button>
+        </div>
+        <div class="mt-5 text-center">
+            <div class="d-flex justify-content-center bg-alert rounded p-3">
+                <span>تغییر زمان پرداخت سرور</span>
+            </div>
+            {{ form_duration.payment_duration|add_class:"form-select mx-auto mt-4 mb-4"|attr:"style:width:50%" }}
+            <button onclick="serverAction('change-duration')" class="btn bg-primary px-5 text-white mt-3 mt-sm-0">ثبت</button>
         </div>
     </div>
     <div class="container rounded-4 border bg-white p-4 my-3">
@@ -167,15 +175,30 @@
             "reboot": "ریبوت سرور", "power-on": "روشن کردن سرور",
             "power-off": "خاموش کردن سرور",
             "change-password": "تغییر رمز سرور", "delete": "حذف سرور",
-            "change-ip": "تعویض آیپی v4"
+            "change-ip": "تعویض آیپی v4",
+            "change-duration": 'تغییر تایم پرداخت',
         }
 
         async function api(action, slug) {
-            let response = await fetch(`{{ api_url }}server-rent/cloud/action/${slug}/${action}/`, {
-                method: "POST",
-                credentials: 'include',
-                headers: {"X-CSRFToken": getCookie("csrftoken")},
-            });
+            if (action === 'change-duration') {
+                const formData  = new FormData();
+                var e = document.getElementById("id_payment_duration");
+                var value = e.value;
+                formData.append('payment_duration', value)
+                let response = await fetch(`{{ api_url }}server-rent/cloud/action/${slug}/${action}/`, {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {"X-CSRFToken": getCookie("csrftoken")},
+                    body: formData
+                });
+            }
+            else {
+                let response = await fetch(`{{ api_url }}server-rent/cloud/action/${slug}/${action}/`, {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {"X-CSRFToken": getCookie("csrftoken")}
+                });
+            }
             return await response.json()
         }
 
@@ -207,23 +230,25 @@
             setLoading("on")
             let slug = window.location.href.split("/").slice(-2).join("")
             api(action, slug).then(response => {
-                setLoading("off")
-                let message = response["message"]
+                setLoading("off");
+                let message = response["message"];
                 if (response["status"] === true) {
                     if (response["password"]) {
-                        $("#root-password").text(response["password"])
+                        $("#root-password").text(response["password"]);
                         $("#wrapper-root-password").removeClass("d-none").addClass("d-flex")
                     } if (response["next"])
-                        window.location.replace(response["next"])
+                        window.location.replace(response["next"]);
                     if (response["ip"])
-                        $("#ipv4").text(response["ip"])
-                    showToast("success", message)
+                        $("#ipv4").text(response["ip"]);
+                    showToast("success", message);
                 } else {
-                    showToast("error", message)
+                    showToast("error", message);
                 }
-            }).catch(() => {
-                setLoading("off")
-                showToast("error")
+            }).then((responseJson) => {
+                console.log('sldkfj');
+            }).catch((error) => {
+                setLoading("off");
+                showToast("error");
             })
         }
 

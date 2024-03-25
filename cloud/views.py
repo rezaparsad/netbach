@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from account.utility import human_readable_size
 from config.settings import PAGINATION_SERVERS, API_URL
-from .forms import CreateServerCloudFrom
+from .forms import CreateServerCloudFrom, ChangeDurationForm
 from .models import Server, ServerRent, ActivityServer, Location, Category, FAQ
 from blog.views import last_blogs
 
@@ -71,7 +71,8 @@ def server_detail(request, slug):
             if a[0] == activity.activity:
                 activity.activity = a[1]
         activity.created = jdatetime.datetime.fromgregorian(datetime=activity.created).strftime('%H:%M:%S | %Y/%m/%d')
-    return render(request, "cloud/server-detail.html", {"server": server, 'activities': activities})
+    form_duration = ChangeDurationForm
+    return render(request, "cloud/server-detail.html", {"server": server, 'activities': activities, 'form_duration': form_duration})
 
 
 @login_required()

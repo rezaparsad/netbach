@@ -20,3 +20,10 @@ class CategoryAdminFrom(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(attrs={"style": "width: 80%"}))
     description = forms.CharField(widget=forms.Textarea)
     slug = forms.SlugField(widget=forms.TextInput(attrs={"style": "width: 80%"}))
+
+
+class ChangeDurationForm(forms.ModelForm):
+
+    class Meta:
+        model = ServerRent
+        fields = ('payment_duration', )
