@@ -226,30 +226,64 @@
             $("#toast-notification").toast("show");
         }
 
-        function sendActionServer(action) {
+        async function sendActionServer(action) {
             setLoading("on")
             let slug = window.location.href.split("/").slice(-2).join("")
-            api(action, slug).then(response => {
-                setLoading("off");
-                let message = response["message"];
-                if (response["status"] === true) {
-                    if (response["password"]) {
-                        $("#root-password").text(response["password"]);
-                        $("#wrapper-root-password").removeClass("d-none").addClass("d-flex")
-                    } if (response["next"])
-                        window.location.replace(response["next"]);
-                    if (response["ip"])
-                        $("#ipv4").text(response["ip"]);
-                    showToast("success", message);
-                } else {
-                    showToast("error", message);
-                }
-            }).then((responseJson) => {
-                console.log('sldkfj');
-            }).catch((error) => {
-                setLoading("off");
-                showToast("error");
-            })
+
+            if (action === 'change-duration') {
+                const formData  = new FormData();
+                var e = document.getElementById("id_payment_duration");
+                var value = e.value;
+                formData.append('payment_duration', value)
+                let response = await fetch(`{{ api_url }}server-rent/cloud/action/${slug}/${action}/`, {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {"X-CSRFToken": getCookie("csrftoken")},
+                    body: formData
+                }).then(res => res.json()).then(data => {
+                    obj = data;
+                })
+                .then(() => {
+                    showResponse(obj)
+                })
+                .catch(error => {
+                    setLoading("off");
+                    showToast("error");
+                });
+            }
+            else {
+                let res = await fetch(`{{ api_url }}server-rent/cloud/action/${slug}/${action}/`, {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {"X-CSRFToken": getCookie("csrftoken")}
+                }).then(res => res.json()).then(data => {
+                    obj = data;
+                })
+                .then(() => {
+                    showResponse(obj)
+                })
+                .catch(error => {
+                    setLoading("off");
+                    showToast("error");
+                });
+            }
+        }
+
+        function showResponse(response) {
+            setLoading("off");
+            let message = response["message"];
+            if (response["status"] === true) {
+                if (response["password"]) {
+                    $("#root-password").text(response["password"]);
+                    $("#wrapper-root-password").removeClass("d-none").addClass("d-flex")
+                } if (response["next"])
+                    window.location.replace(response["next"]);
+                if (response["ip"])
+                    $("#ipv4").text(response["ip"]);
+                showToast("success", message);
+            } else {
+                showToast("error", message);
+            }
         }
 
         $("#button-confirm").click(() => {
