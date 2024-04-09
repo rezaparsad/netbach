@@ -35,6 +35,7 @@ while True:
             
             if price > amount and not redis.get(f'send-end-charge-{user.phone}'):
                 redis.set(f'send-end-charge-{user.phone}', 'time', ex=86400)
-                sms_ir.send_sms(user.phone, 'سلام کاربر گرامی\n\nشارژ شما درحال تمام شدن است و ممکن است سرورهای شما حذف شود\nلطفا حساب خودتون شارژ کنید\n\nhttps://panel.netbach.com')
+                print(sms_ir.send_sms(user.phone, 'سلام کاربر گرامی\n\nشارژ شما درحال تمام شدن است و ممکن است سرورهای شما حذف شود\nلطفا حساب خودتون شارژ کنید\n\nhttps://panel.netbach.com'))
                 print(user.phone, amount, price)
+                print('--------------------------------')
     sleep(300)
