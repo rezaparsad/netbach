@@ -22,7 +22,8 @@ while True:
         amount = Wallet.objects.get(user=user).amount
         servers: ServerRent = []
         for server in ServerRent.objects.filter(is_active=True):
-            if server.expire.timestamp() < datetime.datetime.now(timezone('Asia/Tehran')) + datetime.timedelta(days=1):
+            time_expire = datetime.datetime.now(timezone('Asia/Tehran')) + datetime.timedelta(days=1)
+            if server.expire.timestamp() < time_expire.timestamp():
                 servers.append(server)
         
         price = 0
