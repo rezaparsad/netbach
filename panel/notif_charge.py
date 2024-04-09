@@ -31,6 +31,5 @@ while True:
             price += server.server.price_daily if server.payment_duration == 'daily' else server.server.price_monthly
         
         if price > amount:
-            print(amount, price)
-            print(user.phone)
+            print(user.phone, amount, price)
     sleep(300)
