@@ -17,7 +17,7 @@ hamrah_aval_prefix = [910, 911, 912, 913, 914, 915, 916, 917, 918, 919, 990, 991
 ritel_prefix = [920, 921, 922]
 shatel_prefix = [999]
 all_prefix = irancell_prefix + hamrah_aval_prefix + ritel_prefix + shatel_prefix
-sms_ir = SmsIr(SMS_API_KEY)
+sms_ir = SmsIr(SMS_API_KEY, SMS_PHONE)
 
 
 def check_amount(amount):

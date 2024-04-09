@@ -15,6 +15,8 @@ from wallet.models import Wallet
 import datetime
 from pytz import timezone
 from time import sleep
+from account.utility import sms_ir
+from config.settings import redis
 
 
 while True:
@@ -31,6 +33,8 @@ while True:
             for server in servers:
                 price += server.server.price_daily if server.payment_duration == 'daily' else server.server.price_monthly
             
-            if price > amount:
+            if price > amount and not redis.get(f'send-end-charge-{user.phone}'):
+                redis.set(f'send-end-charge-{user.phone}', 'time', ex=86400)
+                sms_ir.send_sms()
                 print(user.phone, amount, price)
     sleep(300)
