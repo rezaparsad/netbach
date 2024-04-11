@@ -223,6 +223,7 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
                 server=server_rent,
                 activity='created'
             )
+            redis.delete(f'send-end-charge-{server_rent.user.phone}')
         return Response(res)
 
 
