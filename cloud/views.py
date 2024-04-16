@@ -27,7 +27,8 @@ def server_list(request):
     except Exception:
         return Http404()
     for server in page_obj:
-        server.created = jdatetime.datetime.fromgregorian(datetime=server.created).strftime('%H:%M:%S | %Y/%m/%d')
+        server.created = jdatetime.datetime.fromgregorian(datetime=server.created).strftime('%H:%M | %Y/%m/%d')
+        server.expire = jdatetime.datetime.fromgregorian(datetime=server.expire).strftime('%H:%M | %Y/%m/%d')
     return render(request, "cloud/server-list.html", {"servers": page_obj})
 
 
@@ -66,6 +67,7 @@ def server_detail(request, slug):
     server.server.traffic = human_readable_size(server.server.traffic)
     server.server.price = human_readable_size(server.server.price_monthly, price=True)
     server.cost = human_readable_size(server.cost, price=True)
+    server.expire = jdatetime.datetime.fromgregorian(datetime=server.expire).strftime('%H:%M | %Y/%m/%d')
     for activity in activities:
         for a in ActivityServer.ACTIVITY_CHOICES:
             if a[0] == activity.activity:

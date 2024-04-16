@@ -59,7 +59,11 @@
         </div>
     </div>
     <div class="container rounded-4 border bg-white p-4 my-3">
-        <div class="d-flex justify-content-center bg-alert rounded p-3">
+        <div class="justify-content-center bg-alert rounded p-2 text-center">
+            <p style="font-weight: bold;">تاریخ سر رسید: {{ server.expire }}</p>
+            <p>در صورت شارژ نداشتن کامل برای پرداخت، سرور حذف میشود.</p>
+        </div>
+        <div class="d-flex justify-content-center bg-alert rounded p-3 mt-3">
             <span>اطلاعات مربوط به هزینه سرور</span>
         </div>
         <div class="row justify-content-around mt-4">
