@@ -37,6 +37,7 @@ def check_servers():
                         '%Y/%m/%d | %H:%M:%S')
                     user_wallet = Wallet.objects.get(user=server.user)
                     price = server.server.price_daily if server.payment_duration == server.CHOICES_DURATION[0][0] else server.server.price_monthly
+                    days = 30 if server.payment_duration == 'monthly' else 1
                     if user_wallet.amount < price:
                         datacenter = get_datacenter(server)
                         if datacenter is None:
@@ -53,7 +54,7 @@ def check_servers():
                         user_wallet.amount -= price
                         user_wallet.save()
                         server.cost += price
-                        server.expire += datetime.timedelta(days=1)
+                        server.expire += datetime.timedelta(days=days)
                         server.save()
                         ServerCost.objects.create(
                             user=server.user,
