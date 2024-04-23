@@ -43,6 +43,9 @@ def server_create(request):
         server.disk = human_readable_size(server.disk)
         server.traffic = human_readable_size(server.traffic)
         server.price_monthly = human_readable_size(server.price_monthly, price=True)
+        for t in Server.CHOICES_TYPE_CPU:
+            if server.type_cpu == t[0]:
+                server.type_cpu = t[1]
     page = request.GET.get('page', '1')
     url_api_server_list = API_URL[:-1] + reverse('server-list', 'api.urls') + f'?page={page}'
     return render(
@@ -119,6 +122,9 @@ def category(request, slug):
         server.disk = human_readable_size(server.disk)
         server.traffic = human_readable_size(server.traffic)
         server.price = human_readable_size(server.price_monthly, price=True)
+        for t in Server.CHOICES_TYPE_CPU:
+            if server.type_cpu == t[0]:
+                server.type_cpu = t[1]
     faqs = FAQ.objects.filter(category=cat, is_active=True)
     return render(
         request, 

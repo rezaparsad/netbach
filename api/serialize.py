@@ -64,3 +64,9 @@ class ServerCloudSerializer(serializers.ModelSerializer):
     
     def get_price_daily(self, obj):
         return human_readable_size(obj.price_daily, price=True)
+
+    def get_type_cpu(self, obj):
+        for t in Server.CHOICES_TYPE_CPU:
+            if obj.type_cpu == t[0]:
+                return t[1]
+        return obj.type_cpu
