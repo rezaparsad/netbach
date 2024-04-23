@@ -25,6 +25,7 @@ class ServerCloudSerializer(serializers.ModelSerializer):
             'cpu',
             'disk',
             'type_disk',
+            'type_cpu',
             'traffic',
             'port',
             'price_monthly',

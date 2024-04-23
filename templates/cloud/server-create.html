@@ -46,7 +46,7 @@
                         <h3 class="mt-2">{{ server.name }}</h3>
                         <hr>
                         <p>RAM: {{ server.ram }}</p>
-                        <p>CPU: {{ server.cpu }}</p>
+                        <p>CPU: {{server.type_cpu}} {{ server.cpu }}</p>
                         <p>Disk: {{ server.disk }}</p>
                         <p>Traffic: {{ server.traffic }}</p>
                         <hr>
@@ -209,7 +209,7 @@
                         <h3 class="mt-2">${serverList[i].name}</h3>
                         <hr>
                         <p>RAM: ${serverList[i].ram}</p>
-                        <p>CPU: ${serverList[i].cpu}</p>
+                        <p>CPU: ${serverList[i].type_cpu} ${serverList[i].cpu}</p>
                         <p>Disk: ${serverList[i].disk}</p>
                         <p>Traffic: ${serverList[i].traffic}</p>
                         <hr>
@@ -231,7 +231,7 @@
                         <h3 class="mt-2">${serverList[i].name}</h3>
                         <hr>
                         <p>RAM: ${serverList[i].ram}</p>
-                        <p>CPU: ${serverList[i].cpu}</p>
+                        <p>CPU: ${serverList[i].type_cpu} ${serverList[i].cpu}</p>
                         <p>Disk: ${serverList[i].disk}</p>
                         <p>Traffic: ${serverList[i].traffic}</p>
                         <hr>
