@@ -49,7 +49,7 @@ class Linode:
             'Amsterdam': 'nl-ams', 'Stockholm': 'se-sto', 'Chennai': 'in-maa', 'Osaka': 'jp-osa',
             'Milan': 'it-mil', 'Miami': 'us-mia', 'Jakarta': 'id-cgk', 'Los Angeles': 'us-lax',
             'Dallas': 'us-central', 'Fremont': 'us-west', 'Atlanta': 'us-southeast', 'Newark': 'us-east',
-            'London': 'eu-west', 'Singapore': 'ap-south', 'Frankfurt': 'eu-central'
+            'London': 'eu-west', 'Singapore': 'ap-south', 'Frankfurt': 'eu-central', 'Madrid': 'es-mad'
         }
         return location_fields.get(location.title())
 

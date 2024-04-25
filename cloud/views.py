@@ -36,7 +36,10 @@ def server_list(request):
 def server_create(request):
     servers = Server.objects.filter(is_active=True).order_by("price_monthly")
     locations = Location.objects.filter(is_active=True)
+    datacenter_list = []
+    datacenter_check = {}
     for server in servers:
+        server.created.timestamp()
         server.price_daily = human_readable_size(server.price_daily, price=True)
         server.ram = human_readable_size(server.ram)
         server.cpu = human_readable_size(server.cpu, cpu=True)
@@ -46,6 +49,20 @@ def server_create(request):
         for t in Server.CHOICES_TYPE_CPU:
             if server.type_cpu == t[0]:
                 server.type_cpu = t[1]
+        if server.datacenter.pk not in datacenter_check:
+            server.datacenter.locations = []
+            datacenter_check[server.datacenter.pk] = []
+            datacenter_list.append(server.datacenter)
+        for location in server.location.all():
+            if location.pk not in datacenter_check[server.datacenter.pk]:
+                datacenter_check[server.datacenter.pk].append(location.pk)
+                server.datacenter.locations.append(location)
+        
+        new_data_match = []
+        for data in datacenter_list:
+            new_data_match.append(data)
+        datacenter_list = sorted(new_data_match, key=lambda k: k.created.timestamp(), reverse=False)
+        
     page = request.GET.get('page', '1')
     url_api_server_list = API_URL[:-1] + reverse('server-list', 'api.urls') + f'?page={page}'
     return render(
@@ -54,6 +71,7 @@ def server_create(request):
         {
             "servers": servers, 
             'locations': locations,
+            'datacenters': datacenter_list,
             'url_api_server_list': url_api_server_list,
             'form': CreateServerCloudFrom
         }

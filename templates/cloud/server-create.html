@@ -27,15 +27,20 @@
         </div>
     </div>
     <div id="detailServer" class="container bg-white rounded-3 p-4">
-        <ul id="location-server" class="list-unstyled text-center">
-            {% for location in locations %}
-                <li class="me-2 text-center" style="display: inline-block; cursor: pointer;">
-                    <div class="loc-server border rounded p-1 text-center" data-name="{{ location.city }}"><img
-                            class="rounded" src="{{ location.image.file.url }}" style="width: 60px; height: 42px;"
-                            alt="{{ location.city }}"></div>
-                    <p class="mt-1">{{ location.city }}</p></li>
-            {% endfor %}
-        </ul>
+        {% for datacenter in datacenters %}
+            <div class="text-center mb-3 {% if forloop.counter != 1 %}mt-5{% endif %}">
+                <strong class="w-100 fs-6">لوکیشن های دیتاسنتر {{ datacenter.name }}</strong>
+            </div>
+            <ul id="location-server" class="list-unstyled text-center">
+                {% for location in datacenter.locations %}
+                    <li class="me-2 text-center" style="display: inline-block; cursor: pointer;">
+                        <div class="loc-server border rounded p-1 text-center" data-name="{{ location.city }}"><img
+                                class="rounded" src="{{ location.image.file.url }}" style="width: 60px; height: 42px;"
+                                alt="{{ location.city }}"></div>
+                        <p class="mt-1">{{ location.city }}</p></li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
     </div>
     <div class="container rounded-4 border bg-white p-4 my-3">
         {% if servers %}
