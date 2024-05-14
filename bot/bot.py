@@ -52,8 +52,11 @@ async def private_message(message):
 
             statistics += "\n"
             counter += 1
-        await message.reply(statistics)
+        with open('file.txt', 'w') as f:
+            f.write(statistics)
+        app.send_document(message.chat.id, 'file.txt', reply_to_message_id=message.id)
         await message.reply("Done ✅")
+        os.remove('file.txt')
 
     elif text == "/servers":
         servers = ServerRent.objects.filter(is_active=True)

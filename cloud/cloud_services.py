@@ -316,3 +316,9 @@ class Hetzner:
             return res
         except Exception:
             return res
+
+
+class NetCup:
+    
+    def server_create(self, name, server_object, image_name, location):
+        pass
