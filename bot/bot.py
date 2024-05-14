@@ -68,7 +68,19 @@ async def private_message(message):
             statistics += jdatetime.datetime.fromgregorian(datetime=server.created).strftime('%Y/%m/%d | %H:%M:%S')
             statistics += "\n"
             counter += 1
-        await message.reply(statistics)
+        counter = 0
+        text = ''
+        for stat in statistics.split('\n'):
+            text += stat + '\n'
+            if counter >= 50:
+                await app.send_message(
+                    message.chat.id,
+                    text,
+                    reply_to_message_id=message.id
+                )
+                text = ''
+                counter = 0
+            counter += 1
         await message.reply("Done ✅")
 
     elif message.reply_to_message and message.reply_to_message.text:
