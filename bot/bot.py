@@ -52,11 +52,20 @@ async def private_message(message):
 
             statistics += "\n"
             counter += 1
-        with open('file.txt', 'w') as f:
-            f.write(statistics)
-        await app.send_document(message.chat.id, 'file.txt', reply_to_message_id=message.id)
+        counter = 0
+        text = ''
+        for stat in statistics.split('\n'):
+            text += stat + '\n'
+            if counter >= 50:
+                await app.send_message(
+                    message.chat.id,
+                    text,
+                    reply_to_message_id=message.id
+                )
+                text = ''
+                counter = 0
+            counter += 1
         await message.reply("Done ✅")
-        os.remove('file.txt')
 
     elif text == "/servers":
         servers = ServerRent.objects.filter(is_active=True)
