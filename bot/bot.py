@@ -54,7 +54,7 @@ async def private_message(message):
             counter += 1
         with open('file.txt', 'w') as f:
             f.write(statistics)
-        app.send_document(message.chat.id, 'file.txt', reply_to_message_id=message.id)
+        await app.send_document(message.chat.id, 'file.txt', reply_to_message_id=message.id)
         await message.reply("Done ✅")
         os.remove('file.txt')
 
