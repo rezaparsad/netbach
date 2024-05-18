@@ -32,7 +32,7 @@ class Linode:
             'AlmaLinux 8': 'linode/almalinux8', 'AlmaLinux 9': 'linode/almalinux9',
             'Alpine 3.15': 'linode/alpine3.15', 'Alpine 3.16': 'linode/alpine3.16', 'Alpine 3.17': 'linode/alpine3.17',
             'Alpine 3.18': 'linode/alpine3.18', 'Arch Linux': 'linode/arch', 'CentOS 7': 'linode/centos7',
-            'CentOS Stream 8': 'linode/centos-stream8', 'CentOS Stream 9': 'linode/centos-stream9',
+            'CentOS 8': 'linode/centos-stream8', 'CentOS 9': 'linode/centos-stream9',
             'Debian 10': 'linode/debian10', 'Debian 11': 'linode/debian11', 'Debian 12': 'linode/debian12',
             'Fedora 36': 'linode/fedora36', 'Fedora 37': 'linode/fedora37', 'Fedora 38': 'linode/fedora38',
             'Gentoo': 'linode/gentoo', 'Kali Linux': 'linode/kali',
@@ -174,7 +174,7 @@ class Hetzner:
 
     def re_image(self, image):
         os_fields = {
-            'CentOS Stream 8': 'centos-stream-8', 'CentOS Stream 9': 'centos-stream-9',
+            'CentOS 8': 'centos-stream-8', 'CentOS 9': 'centos-stream-9',
             'Ubuntu 20.04': 'ubuntu-20.04', 'Ubuntu 22.04': 'ubuntu-22.04', 'Debian 11': 'debian-11', 
             'Debian 12': 'debian-12', 'Fedora 37': 'fedora-37', 'Fedora 38': 'fedora-38', 
             'Rocky 8': 'rocky-8', 'Rocky 9': 'rocky-9', 'AlmaLinux 8': 'alma-8', 'AlmaLinux 9': 'alma-9'
@@ -334,7 +334,7 @@ class ServerSpace:
     
     def re_image(self, image):
         os_fields = {
-            'CentOS Stream 7': 'CentOS-7.9-X64', 'Ubuntu 20.04': 'Ubuntu-20.04-X64', 
+            'CentOS 7': 'CentOS-7.9-X64', 'Ubuntu 20.04': 'Ubuntu-20.04-X64', 
             'Ubuntu 22.04': 'Ubuntu-22.04-X64', 'Debian 11': 'Debian-11.6-X64', 
             'Debian 12': 'Debian-12-X64', 'Rocky 9': 'Rocky Linux-9.3-X64', 
             'AlmaLinux 8': 'AlmaLinux-8.7-X64', 'AlmaLinux 9': 'AlmaLinux-8.7-X64',
