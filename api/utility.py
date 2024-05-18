@@ -6,7 +6,7 @@ def get_datacenter(server):
         return hetzner
     elif server.datacenter.name.lower() == "linode":
         return linode
-    elif server.datacenter.name.lower() == "server space":
+    elif server.datacenter.name.lower() == "server space" or server.datacenter.name.lower() == "snet":
         return server_space
     else:
         return None
