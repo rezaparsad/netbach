@@ -10,4 +10,5 @@ sleep 4
 
 screen -dm -S cost_server_cloud python cloud/check_cost_server.py
 screen -dm -S notif_charge python panel/notif_charge.py
+screen -dm -S bot python cloud/complete_server.py
 screen -dm -S bot python bot/bot.py
