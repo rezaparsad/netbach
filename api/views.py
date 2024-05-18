@@ -231,7 +231,7 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
                 activity='created'
             )
             redis.delete(f'send-end-charge-{server_rent.user.phone}')
-            if server_rent.datacenter.name == 'server space':
+            if server_rent.datacenter.name.lower() == 'server space' or server_rent.datacenter.name.lower() == 'snet':
                 redis.sadd('notification-complete', f'comserverspace::{server_rent.pk}')
         return Response(res)
 
