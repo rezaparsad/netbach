@@ -32,6 +32,7 @@ async def get_data_server(server: ServerRent):
             'x-api-key': server.token.key
         }
     )
+    print(server.pk, response)
 
     for s in response.json()['servers']:
         if s['name'] == server.slug:
