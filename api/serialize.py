@@ -36,7 +36,12 @@ class ServerCloudSerializer(serializers.ModelSerializer):
         ]
 
     def get_operation_systems(self, obj):
-        return [i.name for i in obj.os.all()]
+        os_list = []
+        for o in obj.os.all():
+            if o.price_monthly > 0:
+                o.name = f'{o.name} + ({o.price_monthly} تومان ماهانه)'
+            os_list.append(o.name)
+        return os_list
     
     def get_locations(self, obj):
         return [{'city': i.city, 'image': i.image.file.url} for i in obj.location.all()]

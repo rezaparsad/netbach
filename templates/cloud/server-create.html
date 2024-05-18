@@ -34,9 +34,11 @@
             <ul id="location-server" class="list-unstyled text-center">
                 {% for location in datacenter.locations %}
                     <li class="me-2 text-center" style="display: inline-block; cursor: pointer;">
-                        <div class="loc-server border rounded p-1 text-center" data-name="{{ location.city }}"><img
-                                class="rounded" src="{{ location.image.file.url }}" style="width: 60px; height: 42px;"
-                                alt="{{ location.city }}"></div>
+                        <div class="loc-server border rounded p-1 text-center" data-name="{{ location.city }}">
+                            <div class="position-relative">
+                                {% if location.price_monthly > 0 %}<div class="position-absolute"><p class="text-dark m-0 bg-white" style="border-radius: 0.18rem; padding-right: 2px; padding-left: 2px; opacity: 68%; font-size: 0.7rem;">{{location.price_monthly}} تومان</p></div>{% endif %}
+                                <img class="rounded" src="{{ location.image.file.url }}" style="width: 60px; height: 42px;" alt="{{ location.city }}"></div>
+                            </div>
                         <p class="mt-1">{{ location.city }}</p></li>
                 {% endfor %}
             </ul>

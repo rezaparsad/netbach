@@ -1,4 +1,4 @@
-from config.settings import hetzner, linode, redis
+from config.settings import hetzner, linode, server_space, redis
 
 
 def get_datacenter(server):
@@ -6,6 +6,8 @@ def get_datacenter(server):
         return hetzner
     elif server.datacenter.name.lower() == "linode":
         return linode
+    elif server.datacenter.name.lower() == "server space":
+        return server_space
     else:
         return None
 

@@ -32,7 +32,11 @@ while True:
             price = 0
             for server in servers:
                 price += server.server.price_daily if server.payment_duration == 'daily' else server.server.price_monthly
-            
+                if server.location.price_monthly > 0:
+                    price += server.location.price_daily if server.payment_duration == 'daily' else server.location.price_monthly
+                if server.os.price_monthly > 0:
+                    price += server.os.price_daily if server.payment_duration == 'daily' else server.os.price_monthly
+                    
             if price > amount and not redis.get(f'send-end-charge-{user.phone}'):
                 redis.set(f'send-end-charge-{user.phone}', 'time', ex=86400)
                 print(sms_ir.send_verify_code(number=user.phone, template_id=554279, parameters=[{"name": "contact", "value": '✓'}]).text)

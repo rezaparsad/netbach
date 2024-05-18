@@ -16,7 +16,7 @@ from account.models import User
 from account.utility import is_phone_correct, get_user_agent, send_code, login_register_user, check_amount
 from blog.models import Blog
 from cloud.forms import CreateServerCloudFrom, ChangeDurationForm
-from cloud.models import Server as ServerCloud, ServerRent, ActivityServer
+from cloud.models import Server as ServerCloud, ServerRent, ActivityServer, Location, OperationSystem
 from config.settings import redis, PANEL_URL
 from wallet.gateway import ZarinPalRequest
 from wallet.models import Wallet, ServerCost
@@ -153,12 +153,11 @@ class ServerCloudList(LoginRequiredMixin, ListAPIView):
 
     def get_queryset(self):
         servers = ServerCloud.objects.filter(is_active=True).order_by("price_monthly")
-        # page = self.request.GET.get('page', '1')
-        # pages = Paginator(servers, 20)
-        # try:
-        #     servers = pages.page(page)
-        # except:
-        #     servers = servers.filter(pk=-1)
+        for server in servers:
+            for o in server.os.all():
+                if o.price_monthly > 0:
+                    o.price_monthly = o.price_monthly / 1000
+                    o.price_monthly = int(o.price_monthly)
         return servers
 
 
@@ -171,9 +170,16 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
         server = get_object_or_404(ServerCloud, slug=slug)
         wallet = Wallet.objects.get(user=request.user)
         price = server.price_daily if form.cleaned_data['duration'] == 'daily' else server.price_monthly
+        oss = form.cleaned_data['os'].split('+')[0][:-1] if '+' in form.cleaned_data['os'] else form.cleaned_data['os']
+        location = Location.objects.get(city=form.cleaned_data['location'])
+        operation_system = OperationSystem.objects.get(name=oss)
+        if location.price_monthly > 0:
+            price += location.price_daily if form.cleaned_data['duration'] == 'daily' else location.price_monthly
+        if operation_system.price_monthly > 0:
+            price += operation_system.price_daily if form.cleaned_data['duration'] == 'daily' else operation_system.price_monthly
         if wallet.amount < price:
             return Response({'status': False, 'message': 'شارژ حساب شما برای افزودن سرور کافی نیست'})
-        operation_systems = server.os.filter(name=form.cleaned_data['os'])
+        operation_systems = server.os.filter(name=oss)
         locations = server.location.filter(city=form.cleaned_data['location'])
         if len(operation_systems) < 1 or len(locations) < 1:
             return Response({'status': False, 'message': 'فرم را درست پر کنید'})
@@ -186,8 +192,9 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
         res = client.server_create(
             name,
             server,
-            form.cleaned_data['os'],
-            form.cleaned_data['location']
+            oss,
+            form.cleaned_data['location'],
+            server=ServerRent
         )
         if res["status"] is True:
             wallet.amount -= price
@@ -217,13 +224,15 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
                 credit_amount=wallet.amount,
             )
             del res["server"]
-            res["next"] = '/cloud' + reverse('server-info', urlconf='cloud.urls', args=[server_rent.slug])
+            res["next"] = '/cloud' + reverse('server-info', urlconf='cloud.urls', args=[server_rent.pk])
             ActivityServer.objects.create(
                 user=request.user,
                 server=server_rent,
                 activity='created'
             )
             redis.delete(f'send-end-charge-{server_rent.user.phone}')
+            if server_rent.datacenter.name == 'server space':
+                redis.sadd('notification-complete', f'comserverspace::{server_rent.pk}')
         return Response(res)
 
 
@@ -233,8 +242,9 @@ class ServerCloudRentViewSet(ViewSet):
 
     @action(methods=["post"], detail=True)
     def reboot(self, request, slug):
+        print(slug)
         action_name = "reboot"
-        server = get_object_or_404(ServerRent, user=request.user, slug=slug, is_active=True)
+        server = get_object_or_404(ServerRent, user=request.user, pk=slug, is_active=True)
         self.check_object_permissions(request, server)
         datacenter = get_datacenter(server)
         if datacenter is None:
@@ -242,6 +252,7 @@ class ServerCloudRentViewSet(ViewSet):
         is_server_limit, ttl = is_server_limited(server, action_name)
         if is_server_limit:
             return Response({"status": False, "message": f"لطفا پس از {ttl} ثانیه دیگر دوباره تلاش کنید"})
+        print('level 1')
         set_server_limit(server, action_name)
         response = datacenter.server_reboot(server)
         if response["status"] is True:
@@ -255,7 +266,7 @@ class ServerCloudRentViewSet(ViewSet):
     @action(methods=["post"], detail=True, url_path="power-on")
     def power_on(self, request, slug):
         action_name = "power_on"
-        server = get_object_or_404(ServerRent, user=request.user, slug=slug, is_active=True)
+        server = get_object_or_404(ServerRent, user=request.user, pk=slug, is_active=True)
         self.check_object_permissions(request, server)
         datacenter = get_datacenter(server)
         if datacenter is None:
@@ -276,7 +287,7 @@ class ServerCloudRentViewSet(ViewSet):
     @action(methods=["post"], detail=True, url_path="power-off")
     def power_off(self, request, slug):
         action_name = "power_off"
-        server = get_object_or_404(ServerRent, user=request.user, slug=slug, is_active=True)
+        server = get_object_or_404(ServerRent, user=request.user, pk=slug, is_active=True)
         datacenter = get_datacenter(server)
         if datacenter is None:
             return Response({"status": False, "message": "دیتاسنتر یافت نشد"})
@@ -296,7 +307,7 @@ class ServerCloudRentViewSet(ViewSet):
     @action(methods=["post"], detail=True, url_path="change-ip")
     def change_ip(self, request, slug):
         action_name = "change_ip"
-        server = get_object_or_404(ServerRent, user=request.user, slug=slug, is_active=True)
+        server = get_object_or_404(ServerRent, user=request.user, pk=slug, is_active=True)
         datacenter = get_datacenter(server)
         if datacenter is None:
             return Response({"status": False, "message": "دیتاسنتر یافت نشد"})
@@ -333,7 +344,7 @@ class ServerCloudRentViewSet(ViewSet):
     @action(methods=["post"], detail=True, url_path="change-password")
     def change_password(self, request, slug):
         action_name = "change_password"
-        server = get_object_or_404(ServerRent, user=request.user, slug=slug, is_active=True)
+        server = get_object_or_404(ServerRent, user=request.user, pk=slug, is_active=True)
         self.check_object_permissions(request, server)
         datacenter = get_datacenter(server)
         if datacenter is None:
@@ -344,7 +355,7 @@ class ServerCloudRentViewSet(ViewSet):
         set_server_limit(server, action_name)
         response = datacenter.server_change_password(server)
         if response["status"] is True:
-            server.password = response["password"]
+            server.password = server.password
             server.save()
             ActivityServer.objects.create(
                 user=request.user,
@@ -356,7 +367,7 @@ class ServerCloudRentViewSet(ViewSet):
     @action(methods=["post"], detail=True)
     def delete(self, request, slug):
         action_name = "delete"
-        server = get_object_or_404(ServerRent, user=request.user, slug=slug, is_active=True)
+        server = get_object_or_404(ServerRent, user=request.user, pk=slug, is_active=True)
         self.check_object_permissions(request, server)
         datacenter = get_datacenter(server)
         if datacenter is None:
@@ -380,7 +391,7 @@ class ServerCloudRentViewSet(ViewSet):
     @action(methods=["post"], detail=True, url_path='change-duration')
     def change_duration(self, request, slug):
         action_name = 'change_duration'
-        server = get_object_or_404(ServerRent, user=request.user, slug=slug, is_active=True)
+        server = get_object_or_404(ServerRent, user=request.user, pk=slug, is_active=True)
         self.check_object_permissions(request, server)
         response = {'status': True, 'message': 'عملیات با وفقیت انجام شد'}
         form = ChangeDurationForm(request.POST)
@@ -389,6 +400,12 @@ class ServerCloudRentViewSet(ViewSet):
         if form.cleaned_data['payment_duration'] != server.payment_duration:
             wallet = Wallet.objects.get(user=request.user)
             price = server.server.price_daily if form.cleaned_data['payment_duration'] == 'daily' else server.server.price_monthly
+
+            if server.location.price_monthly > 0:
+                price += server.location.price_daily if form.cleaned_data['payment_duration'] == 'daily' else server.location.price_monthly
+            if server.os.price_monthly > 0:
+                price += server.os.price_daily if form.cleaned_data['payment_duration'] == 'daily' else server.os.price_monthly
+
             if wallet.amount < price:
                 return Response({'status': False, 'message': 'شارژ حساب شما برای تغییر زمان پرداخت سرور کافی نیست'})
             server.payment_duration = form.cleaned_data['payment_duration']

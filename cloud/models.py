@@ -13,6 +13,8 @@ class Location(models.Model):
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    price_daily = models.IntegerField(default=0)
+    price_monthly = models.IntegerField(default=0)
     
     def __str__(self) -> str:
         return self.country + ' : ' + self.city
@@ -24,6 +26,8 @@ class OperationSystem(models.Model):
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    price_daily = models.IntegerField(default=0)
+    price_monthly = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return self.name

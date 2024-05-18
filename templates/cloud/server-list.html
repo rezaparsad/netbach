@@ -20,7 +20,7 @@
             <div class="row mt-4">
                 {% for server in servers %}
                 <div class="col-12 col-sm-3 mt-3 mt-sm-0">
-                    <a class="text-decoration-none text-dark" href="{% url 'cloud:server-detail' server.slug %}">
+                    <a class="text-decoration-none text-dark" href="{% url 'cloud:server-detail' server.pk %}">
                         <div class="server-detail text-center px-4 pb-0 pt-4 rounded-3 border" style="background-color: #fafafa; cursor: pointer;" data-slug="{{ server.slug }}">
                             <h3 class="mt-2">{{ server.name }}</h3>
                             <hr>

@@ -1,5 +1,6 @@
 import datetime
 import time
+from redis import StrictRedis
 
 from hcloud import Client
 from hcloud.images import Image
@@ -7,8 +8,11 @@ from hcloud.locations.domain import Location
 from hcloud.server_types import ServerType
 from linode_api4 import LinodeClient, Instance
 
-from .utility import generate_password
 
+from .utility import generate_password
+import requests
+
+redis = StrictRedis(host="localhost", port=6379, db=0, decode_responses=True)
 
 class ServerModel:
     slug = ""
@@ -53,7 +57,7 @@ class Linode:
         }
         return location_fields.get(location.title())
 
-    def server_create(self, name, server_object, image_name, location):
+    def server_create(self, name, server_object, image_name, location, **kwargs):
         res = {"status": False}
         try:
             client = self.get_client(server_object.datacenter.token)
@@ -183,7 +187,7 @@ class Hetzner:
         }
         return location_fields.get(location.lower())
 
-    def server_create(self, name, server_object, image_name, location):
+    def server_create(self, name, server_object, image_name, location, **kwargs):
         res = {"status": False}
         try:
             client = self.get_client(server_object.datacenter.token)
@@ -318,7 +322,165 @@ class Hetzner:
             return res
 
 
-class NetCup:
+class ServerSpace:
+
+    def get_client(self, token):
+        re = requests.Session()
+        re.headers = {
+            'content-type': 'application/json',
+            'x-api-key': token.key
+        }
+        return re
     
-    def server_create(self, name, server_object, image_name, location):
-        pass
+    def re_image(self, image):
+        os_fields = {
+            'CentOS Stream 7': 'CentOS-7.9-X64', 'Ubuntu 20.04': 'Ubuntu-20.04-X64', 
+            'Ubuntu 22.04': 'Ubuntu-22.04-X64', 'Debian 11': 'Debian-11.6-X64', 
+            'Debian 12': 'Debian-12-X64', 'Rocky 9': 'Rocky Linux-9.3-X64', 
+            'AlmaLinux 8': 'AlmaLinux-8.7-X64', 'AlmaLinux 9': 'AlmaLinux-8.7-X64',
+            'Windows 2019': 'Windows-Server 2019-X64',
+            'Windows 2022': 'Windows-Server 2022-X64'
+        }
+        return os_fields.get(image, "ubuntu-20.04")
+
+    def re_location(self, location):
+        location_fields = {
+            'istanbul': 'tr', 'amsterdam': 'am2', 'new jersey': 'nj3',
+            'almaty': 'kz', 'toronto': 'ca', 'sao paulo': 'br'
+        }
+        return location_fields.get(location.lower())
+
+    
+    def server_create(self, name, server_object, image_name, location, **kwargs):
+        res = {"status": False}
+        try:
+            client = self.get_client(server_object.datacenter.token)
+            response = client.post(
+                'https://api.serverspace.us/api/v1/servers',
+                json={
+                    'location_id': self.re_location(location),
+                    'image_id': self.re_image(image_name),
+                    'name': name,
+                    'networks': [
+                        {
+                        'bandwidth_mbps': 50
+                        }
+                    ],
+                    'volumes': [
+                        {
+                        'name': 'boot',
+                        'size_mb': int(int(server_object.disk) + (24 *(int(server_object.disk) / 1000)))
+                        }
+                    ],
+                    'cpu': server_object.cpu,
+                    'ram_mb': int(int(server_object.ram) + (24 *(int(server_object.ram) / 1000))),
+                }
+            )
+            if response.status_code not in [200, 201]:
+                raise ValueError
+            server = ServerModel()
+            server.token = server_object.datacenter.token
+            server.ipv4 = 'درحال آماده سازی ...'
+            server.ipv6 = 'null'
+            server.password = 'درحال آماده سازی ...'
+            server.username = 'root'
+            server.slug = name
+            res["status"] = True
+            res["server"] = server
+            return res
+        except Exception as e:
+            print(e)
+            return res
+    
+    def server_reboot(self, server_object):
+        res = {"status": False}
+        try:
+            client = self.get_client(server_object.token)
+            response = client.post(
+                f'https://api.serverspace.us/api/v1/servers/{server_object.slug}/power/reboot'
+            )
+            print(response.text)
+            if response.status_code not in [200, 201]:
+                raise ValueError
+            res["status"] = True
+            return res
+        except Exception:
+            return res
+
+    def server_shutdown(self, server_object):
+        res = {"status": False}
+        try:
+            client = self.get_client(server_object.token)
+            response = client.post(
+                f'https://api.serverspace.us/api/v1/servers/{server_object.slug}/power/off'
+            )
+            if response.status_code not in [200, 201]:
+                raise ValueError
+            res["status"] = True
+            return res
+        except Exception:
+            return res
+
+    def server_power_on(self, server_object):
+        res = {"status": False}
+        try:
+            client = self.get_client(server_object.token)
+            response = client.post(
+                f'https://api.serverspace.us/api/v1/servers/{server_object.slug}/power/on'
+            )
+            if response.status_code not in [200, 201]:
+                raise ValueError
+            res["status"] = True
+            return res
+        except Exception:
+            return res
+
+    def server_power_off(self, server_object):
+        res = {"status": False}
+        try:
+            client = self.get_client(server_object.token)
+            response = client.post(
+                f'https://api.serverspace.us/api/v1/servers/{server_object.slug}/power/shutdown'
+            )
+            if response.status_code not in [200, 201]:
+                raise ValueError
+            res["status"] = True
+            return res
+        except Exception:
+            return res
+    
+    def server_change_password(self, server_object):
+        res = {"status": False}
+        try:
+            res["status"] = True
+            res['message'] = 'آیپی سرور را در تیکت برای پشتیبانی ارسال کنید تا مراحل انجام شود'
+            return res
+        except Exception as e:
+            if str(e) == "400: Linode must be powered off in order to reset root password.; ":
+                res["message"] = "ابتدا سرور را خاموش کنید و پس از 1 دقیقه مجدد درخواست را ارسال کنید"
+            return res
+    
+    def server_delete(self, server_object):
+        res = {"status": False}
+        try:
+            client = self.get_client(server_object.token)
+            response = client.delete(
+                f'https://api.serverspace.us/api/v1/servers/{server_object.slug}'
+            )
+            if response.status_code not in [200, 201]:
+                raise ValueError
+            res["status"] = True
+            return res
+        except Exception as e:
+            res["error"] = str(e)
+            return res
+
+    def server_traffic(self, server_object):
+        res = {"status": False}
+        try:
+            client = self.get_client(server_object.token)
+            res["outgoing_traffic"] = 0
+            res["status"] = True
+            return res
+        except Exception:
+            return res

@@ -5,7 +5,7 @@ from .models import ServerRent
 
 class CreateServerCloudFrom(forms.Form):
     slug = forms.CharField(max_length=20)
-    os = forms.CharField(max_length=30)
+    os = forms.CharField(max_length=50)
     location = forms.CharField(max_length=50)
     duration = forms.ChoiceField(choices=ServerRent.CHOICES_DURATION)
 

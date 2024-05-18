@@ -15,7 +15,7 @@ from pathlib import Path
 
 from redis import StrictRedis
 
-from cloud.cloud_services import Hetzner, Linode
+from cloud.cloud_services import Hetzner, Linode, ServerSpace
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,6 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 redis = StrictRedis(host="localhost", port=6379, db=0, decode_responses=True)
 hetzner = Hetzner()
 linode = Linode()
+server_space = ServerSpace()
+
 PAGINATION_BLOGS = 24
 PAGINATION_TRANSACTIONS = 24
 PAGINATION_HISTORY_LOGIN = 24
@@ -39,7 +41,7 @@ SECRET_KEY = 'django-insecure-7mt1qqvadao9xgqc+j@tl@ib=u@_ar%4mkdz455tg*@gc_-za$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1", ]
 
 SCHEME = "http://"
 DOMAIN_URL = SCHEME + ALLOWED_HOSTS[0]

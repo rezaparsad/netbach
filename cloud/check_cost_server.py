@@ -5,6 +5,7 @@ import time
 
 import django
 import jdatetime
+import pytz
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
@@ -33,10 +34,15 @@ def check_servers():
                 current_date = jdatetime.datetime.now()
                 expire_date = jdatetime.datetime.fromgregorian(datetime=server.expire)
                 if current_date >= expire_date:
-                    fa_time = jdatetime.datetime.fromgregorian(datetime=datetime.datetime.now()).strftime(
-                        '%Y/%m/%d | %H:%M:%S')
+                    fa_time = jdatetime.datetime.fromgregorian(datetime=datetime.datetime.now(pytz.timezone('Asia/Tehran'))).strftime('%Y/%m/%d | %H:%M:%S')
                     user_wallet = Wallet.objects.get(user=server.user)
                     price = server.server.price_daily if server.payment_duration == server.CHOICES_DURATION[0][0] else server.server.price_monthly
+
+                    if server.location.price_monthly > 0:
+                        price += server.location.price_daily if server.payment_duration == 'daily' else server.location.price_monthly
+                    if server.os.price_monthly > 0:
+                        price += server.os.price_daily if server.payment_duration == 'daily' else server.os.price_monthly
+                        
                     days = 30 if server.payment_duration == 'monthly' else 1
                     if user_wallet.amount < price:
                         datacenter = get_datacenter(server)

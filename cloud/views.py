@@ -38,7 +38,6 @@ def server_create(request):
     locations = Location.objects.filter(is_active=True)
     datacenter_list = []
     datacenter_check = set()
-    location_check = set()
     for server in servers:
         server.created.timestamp()
         server.price_daily = human_readable_size(server.price_daily, price=True)
@@ -55,6 +54,9 @@ def server_create(request):
             datacenter_check.add(server.datacenter.pk)
             datacenter_list.append(server.datacenter)
         for location in server.location.all():
+            if location.price_monthly > 0:
+                location.price_monthly = location.price_monthly / 1000
+                location.price_monthly = int(location.price_monthly)
             for d in datacenter_list:
                 if d.pk == server.datacenter.pk:
                     d.locations.add(location)
@@ -80,8 +82,8 @@ def server_create(request):
 
 
 @login_required()
-def server_detail(request, slug):
-    server = get_object_or_404(ServerRent, user=request.user, slug=slug, is_active=True)
+def server_detail(request, pk):
+    server = get_object_or_404(ServerRent, user=request.user, pk=pk, is_active=True)
     activities = ActivityServer.objects.filter(server=server).order_by('-created')[:3]
     server.server.ram = human_readable_size(server.server.ram)
     server.server.cpu = human_readable_size(server.server.cpu, cpu=True)
@@ -100,8 +102,8 @@ def server_detail(request, slug):
 
 
 @login_required()
-def server_activity(request, slug):
-    server = get_object_or_404(ServerRent, user=request.user, slug=slug, is_active=True)
+def server_activity(request, pk):
+    server = get_object_or_404(ServerRent, user=request.user, pk=pk, is_active=True)
     activities = ActivityServer.objects.filter(server=server).order_by('-created')
     page = request.GET.get('page', '1')
     pages = Paginator(activities, 25)
@@ -119,8 +121,8 @@ def server_activity(request, slug):
 
 
 @login_required()
-def server_info(request, slug):
-    server = get_object_or_404(ServerRent, user=request.user, slug=slug, is_active=True)
+def server_info(request, pk):
+    server = get_object_or_404(ServerRent, user=request.user, pk=pk, is_active=True)
     return render(request, "cloud/server-info.html", {"server": server})
 
 
