@@ -48,6 +48,7 @@ async def get_data_server(server: ServerRent):
 async def main():
     while True:
         for note in redis.sscan_iter('notification-complete'):
+            print(note)
             command = note.split('::')[0]
             value = note.split('::')[1]
             redis.srem('notification-complete', note)
