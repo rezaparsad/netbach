@@ -23,6 +23,8 @@ import requests
 async def get_data_server(server: ServerRent):
     if 'Windows' in server.os.name:
         await asyncio.sleep(700)
+    elif server.location.city == 'Dubai':
+        await asyncio.sleep(400)
     else:
         await asyncio.sleep(50)
     response = requests.get(
