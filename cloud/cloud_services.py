@@ -346,7 +346,7 @@ class ServerSpace:
     def re_location(self, location):
         location_fields = {
             'istanbul': 'tr', 'amsterdam': 'am2', 'new jersey': 'nj3',
-            'almaty': 'kz', 'toronto': 'ca', 'sao paulo': 'br'
+            'almaty': 'kz', 'toronto': 'ca', 'sao paulo': 'br', 'dubai': 'uae'
         }
         return location_fields.get(location.lower())
 
@@ -363,7 +363,7 @@ class ServerSpace:
                     'name': name,
                     'networks': [
                         {
-                        'bandwidth_mbps': 50
+                        'bandwidth_mbps': 10 if location.lower() == 'dubai' else 50
                         }
                     ],
                     'volumes': [
