@@ -91,6 +91,20 @@ async def private_message(message):
                 counter = 0
             counter += 1
         await message.reply("Done ✅")
+    
+    elif message.text == '/tokens':
+        tokens = {}
+        server_list = ServerRent.objects.filter(is_active=True)
+        for server in server_list:
+            if not server.token.name in tokens:
+                tokens[server.token.name] = 0
+            tokens[server.token.name] += 1
+        text = 'Status tokens\n\n'
+        for t in tokens:
+            text += f'{t}: {tokens[t]}\n'
+        await message.reply(
+            text
+        )
 
     elif message.reply_to_message and message.reply_to_message.text:
         ticket_pk = int(message.reply_to_message.text.split("\n")[0].split(" ")[-1])
