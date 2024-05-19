@@ -100,11 +100,13 @@ async def private_message(message):
                 tokens[server.token.name] = 0
             tokens[server.token.name] += 1
         text = 'Status tokens\n\n'
+        token_keys = []
         for t in tokens:
+            token_keys.append(t)
+        token_keys.sort()
+        for t in token_keys:
             text += f'{t}: {tokens[t]}\n'
-        await message.reply(
-            text
-        )
+        await message.reply(text)
 
     elif message.reply_to_message and message.reply_to_message.text:
         ticket_pk = int(message.reply_to_message.text.split("\n")[0].split(" ")[-1])
