@@ -376,6 +376,7 @@ class ServerSpace:
                     'ram_mb': int(int(server_object.ram) + (24 *(int(server_object.ram) / 1000))),
                 }
             )
+            print(res, res.text)
             if response.status_code not in [200, 201]:
                 raise ValueError
             server = ServerModel()
@@ -399,7 +400,6 @@ class ServerSpace:
             response = client.post(
                 f'https://api.serverspace.us/api/v1/servers/{server_object.slug}/power/reboot'
             )
-            print(response.text)
             if response.status_code not in [200, 201]:
                 raise ValueError
             res["status"] = True

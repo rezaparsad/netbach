@@ -1,7 +1,7 @@
 from django.db import models
 
 from account.models import User
-from config.settings import hetzner, linode
+from config.settings import hetzner, linode, server_space
 from main.media_model import Media
 
 
@@ -148,7 +148,8 @@ class ServerRent(models.Model):
             return hetzner
         elif self.datacenter.name.lower() == "linode":
             return linode
-        return None
+        elif self.datacenter.name.lower() == "server space" or self.datacenter.name.lower() == "snet":
+            return server_space
 
 
 class ActivityServer(models.Model):
