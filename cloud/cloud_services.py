@@ -376,7 +376,7 @@ class ServerSpace:
                     'ram_mb': int(int(server_object.ram) + (24 *(int(server_object.ram) / 1000))),
                 }
             )
-            print(res, res.text)
+            print(response, response.text)
             if response.status_code not in [200, 201]:
                 raise ValueError
             server = ServerModel()
