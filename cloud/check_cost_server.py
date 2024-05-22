@@ -13,7 +13,7 @@ django.setup()
 
 from wallet.models import Wallet, ServerCost
 from cloud.models import ServerRent
-from config.settings import hetzner, linode
+from config.settings import hetzner, linode, server_space
 
 
 def get_datacenter(server):
@@ -21,6 +21,8 @@ def get_datacenter(server):
         return hetzner
     elif server.datacenter.name.lower() == "linode":
         return linode
+    elif server.datacenter.name.lower() == "server space" or server.datacenter.name.lower() == "snet":
+        return server_space
     else:
         return None
 
