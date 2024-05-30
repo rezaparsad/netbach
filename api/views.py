@@ -168,6 +168,12 @@ class ServerCloudBuy(LoginRequiredMixin, APIView):
         if not form.is_valid():
             return Response({'status': False, 'message': 'فرم را درست پر کنید'})
         server = get_object_or_404(ServerCloud, slug=slug)
+        try:
+            server.duration.get(value=form.cleaned_data['duration'])
+        except:
+            durations = [i.name for i in server.duration.all()]
+            return Response({'status': False, 'message': f'فقط این سرور {durations} وجود دارد'})
+        
         wallet = Wallet.objects.get(user=request.user)
         price = server.price_daily if form.cleaned_data['duration'] == 'daily' else server.price_monthly
         oss = form.cleaned_data['os'].split('+')[0][:-1] if '+' in form.cleaned_data['os'] else form.cleaned_data['os']
@@ -392,6 +398,12 @@ class ServerCloudRentViewSet(ViewSet):
     def change_duration(self, request, slug):
         action_name = 'change_duration'
         server = get_object_or_404(ServerRent, user=request.user, pk=slug, is_active=True)
+        try:
+            server.server.duration.get(value=form.cleaned_data['payment_duration'])
+        except:
+            durations = [i.name for i in server.duration.all()]
+            return Response({'status': False, 'message': f'فقط این سرور {durations} وجود دارد'})
+        
         self.check_object_permissions(request, server)
         response = {'status': True, 'message': 'عملیات با وفقیت انجام شد'}
         form = ChangeDurationForm(request.POST)

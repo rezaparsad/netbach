@@ -112,6 +112,7 @@ class Server(models.Model):
     type_disk = models.CharField(max_length=15, choices=CHOICES_TYPE_DISK)
     traffic = models.CharField(max_length=24)
     port = models.CharField(max_length=24)
+    duration = models.ManyToManyField(Duration)
     price_monthly = models.IntegerField(default=0)
     price_daily = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
