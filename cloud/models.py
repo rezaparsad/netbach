@@ -79,6 +79,12 @@ class Category(models.Model):
         return self.slug
 
 
+class Duration(models.Model):
+    user = models.ForeignKey(User, models.CASCADE)
+    name = models.CharField(max_length=50)
+    value = models.CharField(max_length=50)
+
+
 class Server(models.Model):
     CHOICES_TYPE_DISK = (
         ('ssd', 'SSD'),
