@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.humanize.templatetags import humanize
 
 from .forms import CategoryAdminFrom
-from .models import Server, ServerRent, Location, OperationSystem, DataCenter, ActivityServer, Token, Category
+from .models import Server, ServerRent, Location, OperationSystem, DataCenter, ActivityServer, Token, Category, Duration
 
 
 class ServerAdmin(admin.ModelAdmin):
@@ -69,3 +69,4 @@ admin.site.register(DataCenter)
 admin.site.register(ActivityServer, ActivityServerRent)
 admin.site.register(Token, TokenAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Duration)

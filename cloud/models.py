@@ -80,7 +80,7 @@ class Category(models.Model):
 
 
 class Duration(models.Model):
-    user = models.ForeignKey(User, models.CASCADE)
+    user = models.ForeignKey(User, models.CASCADE, related_name='cloud_duration_user')
     name = models.CharField(max_length=50)
     value = models.CharField(max_length=50)
 
