@@ -121,7 +121,7 @@ def send_code(request, phone, hash_id):
     real_code = "".join([str(i) for i in random.choices(range(10), k=5)])
     res = sms_ir.send_verify_code(number=phone, template_id=SMS_TEMPLATE_ID, parameters=[{"name": "code", "value": real_code}])
     if res.status_code != 200:
-        return False
+        return False, False
     hash_id = make_hash()
     redis.set(f"VerificationHashId-{hash_id}", real_code, ex=300)
     print(phone, real_code)
