@@ -27,16 +27,16 @@ def check_amount(amount):
 
 
 def check_phone_ip(request, phone):
-    user_ip = get_client_ip(request)
-    counter_ip = redis.get(f"VerificationIP-{user_ip}") or 0
-    counter_ip = int(counter_ip)
-    if counter_ip >= 5:
-        return False
+    # user_ip = get_client_ip(request)
+    # counter_ip = redis.get(f"VerificationIP-{user_ip}") or 0
+    # counter_ip = int(counter_ip)
+    # if counter_ip >= 5:
+    #     return False
     counter_phone = redis.get(f"VerificationPhone-{phone}") or 0
     counter_phone = int(counter_phone)
     if counter_phone >= 5:
         return False
-    redis.set(f"VerificationIP-{user_ip}", counter_ip + 1, ex=86400)
+    # redis.set(f"VerificationIP-{user_ip}", counter_ip + 1, ex=86400)
     redis.set(f"VerificationPhone-{phone}", counter_phone + 1, ex=86400)
     return True
 
