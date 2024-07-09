@@ -24,16 +24,6 @@ p {
         width: 100% !important;
     }
 
-    .img-editor {
-        width: 100% !important;
-        height: 100% !important;
-        align-self: center !important;
-        cursor: pointer;
-        border-radius: 8px;
-        margin-top: 15px;
-        max-width: 900px;
-    }
-
     .login-card {
         width: 100%;
     }
@@ -91,16 +81,6 @@ p {
 @media only screen and (min-width: 576px) {
     .show-all-server-size {
         width: 20% !important;
-    }
-
-    .img-editor {
-        width: 100% !important;
-        height: 100% !important;
-        align-self: center !important;
-        cursor: pointer;
-        border-radius: 8px;
-        margin-top: 15px;
-        max-width: 900px;
     }
 
     .video-size {
