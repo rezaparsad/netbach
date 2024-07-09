@@ -417,3 +417,11 @@ body {
     color: var(--primary-color-text) !important;
     transition: .3s linear;
 }
+
+.img-editor {
+    width: 100% !important;
+    height: 100% !important;
+    align-self: center !important;
+    cursor: pointer;
+    border-radius: 8px;
+}
